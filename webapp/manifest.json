@@ -12,12 +12,21 @@
 		"sourceTemplate": {
 			"id": "ui5template.basicSAPUI5ApplicationProject",
 			"version": "1.54.6"
+		},
+		"dataSources": {
+			"cosmosWebApi": {
+				"uri": "http://localhost:8088/",
+				"type": "JSON",
+				"settings": {
+					"localUri" : "/"
+				}
+			}
 		}
 	},
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {
-			"icon": "",
+			"icon": "sap-icon://cloud",
 			"favIcon": "",
 			"phone": "",
 			"phone@2": "",
@@ -29,10 +38,7 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_belize"
-		]
+		"supportedThemes": ["sap_hcb", "sap_belize"]
 	},
 	"sap.ui5": {
 		"rootView": {
@@ -68,11 +74,13 @@
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
-		}
+			"css": [{
+				"uri": "css/style.css"
+			}]
+		},
+		"config": {
+	        "lat": 1,
+	        "lon": 2
+    	}
 	}
 }

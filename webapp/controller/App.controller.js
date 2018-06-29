@@ -3,17 +3,16 @@
  *  Internet : http://www.canon.com
  */
 sap.ui.define([
-	'jquery.sap.global',
-	'sap/ui/core/Fragment',
-	'sap/ui/core/mvc/Controller',
-	'sap/ui/model/json/JSONModel',
-	'sap/m/Popover',
-	'sap/m/Button',
+	"sap/ui/core/Fragment",
+	"sap/ui/core/mvc/Controller",
+	"sap/ui/model/json/JSONModel",
+	"sap/m/Popover",
+	"sap/m/MessageBox",
+	"sap/m/Button",
 	"com/canon/cosmos/webclient/formatter/i18nTranslater",
 	"com/canon/cosmos/webclient/controller/LoginDialog",
-	"com/canon/cosmos/webclient/util/Constants",
 	"com/canon/cosmos/webclient/service/OAuthService"
-], function (jQuery, Fragment, Controller, JSONModel, Popover, Button, i18nTranslater, LoginDialog, Constants, OAuthService) {
+], function (Fragment, Controller, JSONModel, Popover, MessageBox, Button, i18nTranslater, LoginDialog, OAuthService) {
 	"use strict";
 	/**
 	 * @class The main entry class for the cosmos eb client
@@ -27,25 +26,35 @@ sap.ui.define([
 		 */
 		i18nTranslater : i18nTranslater,
 
-
 		onInit : function() {
 			
-			
-			//set dialog
-			this._loginDialog = new LoginDialog(this.getView());
-			
-			
-			var res =OAuthService.getBearerToken("cosmos", "admin", true);
+
+		$.sap.require("jquery.sap.storage");
+        var oStorage = $.sap.storage($.sap.storage.Type.local);
 			
 			
+	
 			
-			$.when(res).then(function(data) {
-			    console.log('finished', data);
-			});
-						
 
 			
-
+			
+			
+			var promise = OAuthService.getBearerToken("cosmos", "admin");
+			 $.when(promise)
+        	.done( (oModel) => {
+        		$.sap.log.info('promise are done');
+        	})
+        	.fail( (err) => {
+				MessageBox.show(err.statusText, {
+					icon: sap.m.MessageBox.Icon.ERROR,
+					title: "Error",
+					actions: [MessageBox.Action.CLOSE],
+					id: "mbox1",
+					details: err.responseText,
+					styleClass: "sapUiSizeCompact",
+					contentWidth: "100px"
+				});
+        	});
 			
 			
 		},
