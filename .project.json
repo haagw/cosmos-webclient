@@ -16,7 +16,7 @@
     },
     {
       "templateId": "ui5template.basicSAPUI5ApplicationProject",
-      "templateVersion": "1.40.12",
+      "templateVersion": "1.54.6",
       "dateTimeStamp": "Tue, 12 Jun 2018 09:15:55 GMT"
     }
   ],
@@ -38,5 +38,15 @@
       "xml": "fioriXmlAnalysis",
       "js": "fioriJsValidator"
     }
+  },
+  "beautifier": {
+    "keep_array_indentation": false,
+    "break_chained_methods": false,
+    "space_before_conditional": true,
+    "unescape_strings": false,
+    "tab_size": "1",
+    "max_preserve_newlines": "2",
+    "wrap_line_length": "140",
+    "brace_style": "collapse"
   }
 }

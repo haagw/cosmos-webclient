@@ -1,0 +1,157 @@
+{
+	"navigation": [{
+		"key": "home",
+		"icon": "sap-icon://home",
+		"expanded" : false,
+		"visible" : true,
+		"items": []
+	},
+	{
+		"key": "jobManager",
+		"icon": "sap-icon://customer-view",
+		"expanded" : false,
+		"visible" : true,
+		"items": []
+	},
+	{
+		"key": "parameterSet",
+		"icon": "sap-icon://key-user-settings",
+		"expanded" : false,
+		"visible" : true,
+		"items": []
+	},
+	{
+		"key": "workflowDesigner",
+		"icon": "sap-icon://dimension",
+		"expanded" : false,
+		"visible" : true,
+		"items": []
+	},
+	{
+		"key": "logManager",
+		"icon": "sap-icon://list",
+		"expanded" : false,
+		"visible" : true,
+		"items": [{
+			"key": "logManager_System",
+			"expanded" : false,
+			"visible" : true
+		}, {
+			"key": "logManager:User",
+			"expanded" : false,
+			"visible" : true
+		}]
+	},
+	{
+		"key": "dataExchange",
+		"icon": "sap-icon://home-share",
+		"expanded" : false,
+		"visible" : true,
+		"items": [{
+			"key": "dataExchange_DeploymentOut",
+			"expanded" : false,
+			"visible" : true
+		}, 
+		{
+			"key": "dataExchange_DeploymentIn",
+			"expanded" : false,
+			"visible" : true
+		}, 
+		{
+			"key": "dataExchange_Versioning",
+			"expanded" : false,
+			"visible" : true
+		}]
+	},
+	{
+		"key": "inputChannelManager",
+		"icon": "sap-icon://inbox",
+		"expanded" : false,
+		"visible" : true,
+		"items": [{
+			"key": "inputChannelManager_Hotfolder",
+			"expanded" : false,
+			"visible" : true
+		}, {
+			"key": "inputChannelManager_Http",
+			"expanded" : false,
+			"visible" : true
+		}]
+	},
+	{
+		"key": "adapterManager",
+		"icon": "sap-icon://repost",
+		"expanded" : false,
+		"visible" : true,
+		"items": [{
+			"key": "adapterManager_Therefore",
+			"expanded" : false,
+			"visible" : true
+		}, {
+			"key": "adapterManager_PrismaPro",
+			"expanded" : false,
+			"visible" : true
+		}]
+	},
+	{
+		"key": "reportManager",
+		"icon": "sap-icon://newspaper",
+		"expanded" : false,
+		"visible" : true,
+		"items": []
+	},
+	{
+		"key": "dataManager",
+		"icon": "sap-icon://database",
+		"expanded" : false,
+		"visible" : true,
+		"items": [{
+			"key": "dataManager_Backup",
+			"expanded" : false,
+			"visible" : true
+		}, {
+			"key": "dataManager_Restore",
+			"expanded" : false,
+			"visible" : true
+		}]
+	}, {
+		"key": "userManager",
+		"icon": "sap-icon://user-settings",
+		"expanded" : false,
+		"visible" : true,
+		"items": []
+	}, {
+		"key": "systemSettings",
+		"icon": "sap-icon://settings",
+		"expanded" : false,
+		"visible" : true,
+		"items": [{
+			"key": "systemSettings_Agent",
+			"expanded" : false,
+			"visible" : true
+		}, {
+			"key": "systemSettings_ApiServer",
+			"expanded" : false,
+			"visible" : true
+		}]
+	}
+	
+	
+	],
+	
+	"fixedNavigation": [{
+		"key": "console",
+		"icon": "sap-icon://my-view"
+	}],
+	"headerItems": [{
+		"text": "File"
+	}, {
+		"text": "Edit"
+	}, {
+		"text": "View"
+	}, {
+		"text": "Settings"
+	}, {
+		"text": "Help"
+	}]
+}

@@ -1,5 +1,4 @@
 <html>
-
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta charset="utf-8">
@@ -7,34 +6,44 @@
 		<title>COSMOS WebClient</title>
 
 		<script id="sap-ui-bootstrap"
-			src="../../resources/sap-ui-core.js"
-			data-sap-ui-libs="sap.m"
+			src="/resources/sap-ui-core.js"
+			data-sap-ui-libs="sap.m, sap.ui.layout"
 			data-sap-ui-theme="sap_belize"
 			data-sap-ui-xx-bindingSyntax="complex"
 			data-sap-ui-preload="async"
+			data-sap-ui-xx-waitForTheme="true"
 			data-sap-ui-compatVersion="edge"
-			data-sap-ui-resourceroots='{"cosmoswebclient": "./", "sap.ui.demo.mock": "mockdata"}'>
+			data-sap-ui-logLevel="INFO"
+			data-sap-ui-debug="false"
+			data-sap-ui-resourceroots='{
+				"com.canon.cosmos.webclient": "./"
+				
+			}'>
+
 		</script>
+		<script src="lib/FakeRest.min.js"></script>
 
 		<!-- Application launch configuration -->
 		<script>
-
-			sap.ui.getCore().attachInit(function() {
-				new sap.m.App ({
-					pages : [
-						new sap.m.Page({
-							title : "COSMOS WebClient",
-							enableScrolling : false,
-							content : [ new sap.ui.core.ComponentContainer({
-								height : "100%", 
-								name : "cosmoswebclient",
-							})
-							]
+			sap.ui.getCore().attachInit(function () {
+				sap.ui.require([
+					"sap/m/Page",
+					"sap/ui/core/ComponentContainer",
+					"sap/ui/thirdparty/sinon"
+				], function (Page, ComponentContainer) {
+					// initialize the UI component
+					new Page({
+						showHeader: false,
+						content: new ComponentContainer({
+							height : "100%",
+							name : "com.canon.cosmos.webclient",
+							settings: {
+								id : "webclient"
+							}
 						})
-					]
-				}).placeAt("content");
+					}).placeAt("content");
+				});
 			});
-
 		</script>
 	</head>
 
