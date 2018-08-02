@@ -9,7 +9,7 @@ sap.ui.define([
 	"use strict";
 	
 	/**
-	 * @class Holds global propereties set at runtime
+	 * @class Holds global properties set at runtime
 	 * @author Wolfgang Haag
 	 * @public
 	 * @name com.canon.cosmos.webclient.utils.GlobalProperties

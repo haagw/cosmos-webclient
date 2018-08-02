@@ -10,129 +10,129 @@
 		"key": "jobManager",
 		"icon": "sap-icon://customer-view",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": []
 	},
 	{
 		"key": "parameterSet",
 		"icon": "sap-icon://key-user-settings",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": []
 	},
 	{
 		"key": "workflowDesigner",
 		"icon": "sap-icon://dimension",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": []
 	},
 	{
 		"key": "logManager",
 		"icon": "sap-icon://list",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": [{
 			"key": "logManager_System",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}, {
-			"key": "logManager:User",
+			"key": "logManager_User",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}]
 	},
 	{
 		"key": "dataExchange",
 		"icon": "sap-icon://home-share",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": [{
 			"key": "dataExchange_DeploymentOut",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}, 
 		{
 			"key": "dataExchange_DeploymentIn",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}, 
 		{
 			"key": "dataExchange_Versioning",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}]
 	},
 	{
 		"key": "inputChannelManager",
 		"icon": "sap-icon://inbox",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": [{
 			"key": "inputChannelManager_Hotfolder",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}, {
 			"key": "inputChannelManager_Http",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}]
 	},
 	{
 		"key": "adapterManager",
 		"icon": "sap-icon://repost",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": [{
 			"key": "adapterManager_Therefore",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}, {
 			"key": "adapterManager_PrismaPro",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}]
 	},
 	{
 		"key": "reportManager",
 		"icon": "sap-icon://newspaper",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": []
 	},
 	{
 		"key": "dataManager",
 		"icon": "sap-icon://database",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": [{
 			"key": "dataManager_Backup",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}, {
 			"key": "dataManager_Restore",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}]
 	}, {
 		"key": "userManager",
 		"icon": "sap-icon://user-settings",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": []
 	}, {
 		"key": "systemSettings",
 		"icon": "sap-icon://settings",
 		"expanded" : false,
-		"visible" : true,
+		"visible" : false,
 		"items": [{
 			"key": "systemSettings_Agent",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}, {
 			"key": "systemSettings_ApiServer",
 			"expanded" : false,
-			"visible" : true
+			"visible" : false
 		}]
 	}
 	
@@ -141,7 +141,8 @@
 	
 	"fixedNavigation": [{
 		"key": "console",
-		"icon": "sap-icon://my-view"
+		"icon": "sap-icon://my-view",
+		"visible" : false
 	}],
 	"headerItems": [{
 		"text": "File"

@@ -28,6 +28,8 @@ sap.ui.define([
 			// set the device model
 			this.setModel(GlobalModels.createDeviceModel(), "device");
 			
+			sap.ui.getCore().setModel(this.getModel("i18n"), "i18n");
+			
 		
 		}
 	});

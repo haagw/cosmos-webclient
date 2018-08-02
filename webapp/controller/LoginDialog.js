@@ -1,15 +1,22 @@
 /**
- *  Copyright © Canon Europe N.V. 2008-2018 All Rights Reserved.
- *  Internet : http://www.canon.com
+ * Copyright © Canon Europe N.V. 2008-2018 All Rights Reserved.
+ * Internet : http://www.canon.com
  */
 sap.ui.define([
 	"sap/ui/base/ManagedObject",
     "sap/ui/model/json/JSONModel",
 	"sap/ui/model/BindingMode",
 	"sap/ui/core/ValueState",
-	"com/canon/cosmos/webclient/util/FormsValidator"
-], function(ManagedObject, JSONModel, BindingMode, ValueState, FormsValidator) {
+	"com/canon/cosmos/webclient/util/FormsValidator",
+	"com/canon/cosmos/webclient/service/OAuthService",
+	"com/canon/cosmos/webclient/formatter/i18nTranslater"
+], function(ManagedObject, JSONModel, BindingMode, ValueState, FormsValidator, OAuthService, i18nTranslater) {
 	"use strict";
+	
+	var oLoginErrorMessage;
+	var oParentView;
+	var oLoginDialog;
+	
 	/**
 	 * @class The login dialog
 	 * @author Wolfgang Haag
@@ -18,12 +25,16 @@ sap.ui.define([
 	 */
 	return ManagedObject.extend("com.canon.cosmos.webclient.controller.LoginDialog", {
 		
+		
+		
 		/** 
 		 * Constructor
 		 * @param {sap.ui.core.mvc.View} oView - The view creates the dialog
 		 */
 		constructor: function(oView) {
-			this._oView = oView;
+			oParentView = oView;
+			oLoginErrorMessage = oParentView.byId("loginErrorMessage");
+			oLoginDialog = oParentView.byId("loginDialog");
 			// Attaches validation handlers
             sap.ui.getCore().attachValidationError(function (oEvent) {
                 oEvent.getParameter("element").setValueState(ValueState.Error);
@@ -42,52 +53,68 @@ sap.ui.define([
 		},
 
 
+
 		/** 
-		 * Opens the dialog
+		 * Opens this dialog 
+		 * @param callback The reference to the callback
 		 */
-		open: function() {
-			var oDialog = this._oView.byId("loginDialog");
-			var oLoginErrorMessage = this._oView.byId("loginErrorMessage");
+		open: function(callback) {
+			
 			var oModel = new JSONModel({
                 InputUserValue: "",
                 InputPasswordValue: ""
             });
             oModel.setDefaultBindingMode(BindingMode.TwoWay);
 			// create dialog lazily
-			if (!oDialog) {
+			if (!oLoginDialog) {
+				
 				
 				var oFragmentController = {
-					onClose: function() {
+					onCloseButtonPressed: function() {
 						sap.ui.getCore().getMessageManager().removeAllMessages();
 						oLoginErrorMessage.setVisible(false);
-						oDialog.getModel().setData(null);
-						oDialog.close();
+						oLoginDialog.getModel().setData(null);
+						oLoginDialog.close();
 					},
-					onLogin: function(){
+					onLoginButtonPressed: function(event){
 						var formsValidator = new FormsValidator();
-						formsValidator.validate(oDialog);
+						formsValidator.validate(oLoginDialog);
 						if(formsValidator.isValid() === true){
-							var _oModel = oDialog.getModel();
-							oLoginErrorMessage.setText(_oModel.getProperty('/InputUserValue'));
-							oLoginErrorMessage.setVisible(true);
-							
-							
-							
+							var username = oModel.getProperty("/InputUserValue");
+							var password = oModel.getProperty("/InputPasswordValue");
+							var promise = OAuthService.getInstance().getBearer(username, password);  
+							$.when(promise)
+			        		.done( function(oModelBearer) {
+								OAuthService.getInstance().setBearerToLocalStorage(oModelBearer);
+								callback.onLoginDone();
+								oLoginErrorMessage.setVisible(false);
+								//oLoginDialog.getModel().setData(null);
+								oLoginDialog.close();
+			        		})
+				        	.fail( function(err)  {
+				        		oLoginErrorMessage.setVisible(true);
+				        		if(err.status === 0){
+				        			oLoginErrorMessage.setText(i18nTranslater.doTranslate("connectionFailure", err.baseURI));
+				        		}else{
+				        			oLoginErrorMessage.setText(err.responseJSON.error + "\n" + err.responseJSON.error_description);
+				        		}
+				        	});
 						}
+					
 						
 					}
 				};
 				// create dialog via fragment factory
-				oDialog = sap.ui.xmlfragment(this._oView.getId(), "com.canon.cosmos.webclient.view.LoginDialog", oFragmentController);
+				oLoginDialog = sap.ui.xmlfragment(oParentView.getId(), "com.canon.cosmos.webclient.view.LoginDialog", oFragmentController);
 				// connect dialog to the root view of this component (models, lifecycle)
-				this._oView.addDependent(oDialog);
+				oParentView.addDependent(oLoginDialog);
 				// forward compact/cozy style into dialog
-				jQuery.sap.syncStyleClass(this._oView.getController().getContentDensityClass(), this._oView, oDialog);
-				oLoginErrorMessage = this._oView.byId("loginErrorMessage");
+				jQuery.sap.syncStyleClass(oParentView.getController().getContentDensityClass(), oParentView, oLoginDialog);
+				oLoginErrorMessage = oParentView.byId("loginErrorMessage");
 			}
 			
-			oDialog.setModel(oModel);
-			oDialog.open();
+			oLoginDialog.setModel(oModel);
+			oLoginDialog.open();
 		}
 	});
 

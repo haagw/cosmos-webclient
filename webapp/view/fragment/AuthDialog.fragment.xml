@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
-	<Dialog id="loginDialog" title="Login" >
+	<Dialog id="authDialog" title="{i18n>login}" >
 		<content>
 			<f:Form id="form" editable="true" width="100%" >
 			    <f:layout>
@@ -23,21 +23,22 @@
                 		<f:FormElement>
             			    <MessageStrip
             			    	id="loginErrorMessage"
-								text=""
+								text="{path:'input>/ErrorText'}"
 								type="Error"
-								visible= "false"
+								visible= "{path:'input>/ErrorVisible'}"
 								showIcon="true"
 								showCloseButton="true"
 								class="sapUiMediumMarginBottom">
 							</MessageStrip>
                 		</f:FormElement>
-                		 <f:FormElement label="Username">
+                		 <f:FormElement label="{i18n>username}">
                 		 	 <f:fields>
                 		 	 	<Input
                                     id="inputUser" 
+                                    editable = "{path : 'input>/UserValueEditable'}"
                                     type="Text" 
                                     value="{
-                                        path: '/InputUserValue',
+                                        path: 'input>/UserValue',
                                         type: 'sap.ui.model.type.String',
                                         constraints: {
                                             minLength: 1
@@ -45,13 +46,13 @@
                                     }" />
                 		 	 </f:fields>
                 		 </f:FormElement>
-                		 <f:FormElement label="Password">
+                		 <f:FormElement label="{i18n>password}">
                 		 	 <f:fields>
                 		 	 	<Input
                                     id="inputPassword" 
                                     type="Password" 
                                     value="{
-                                        path: '/InputPasswordValue',
+                                        path: 'input>/PasswordValue',
                                         type: 'sap.ui.model.type.String',
                                         constraints: {
                                             minLength: 1

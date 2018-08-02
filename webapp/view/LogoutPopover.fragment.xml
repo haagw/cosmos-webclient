@@ -1,0 +1,35 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Popover
+		title="{i18n>userinfo}"
+		class="sapUiContentPadding"
+		placement="Bottom"
+		initialFocus="btnLogout"
+		contentMinWidth="200px" >
+		<content>
+			<VBox alignItems="Start"  >
+				<Label design="Bold" text="{i18n>scope}:" class="sapUiTinyMarginTopBottom" />
+				<Text text="{userdata>/scope}"/>
+			</VBox>
+			<VBox alignItems="Start" >
+				<Label design="Bold" text="{i18n>authorities}:" class="sapUiTinyMarginTopBottom"  />
+				<Text text="{userdata>/authorities}"/>
+			</VBox>
+			<VBox alignItems="Start"  >
+				<Label  design="Bold" text="Client ID:" class="sapUiTinyMarginTopBottom"  />
+				<Text text="{userdata>/client_id}"/>
+			</VBox>		
+			<VBox alignItems="Start" >
+				<Label design="Bold" text="{i18n>aud}:" class="sapUiTinyMarginTopBottom"  />
+				<Text text="{userdata>/aud}"/>
+			</VBox>	
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button id= "btnLogout" text="{i18n>logout}" press="onLogoutPressed" />
+			</Toolbar>
+		</footer>
+	</Popover>
+</core:FragmentDefinition>

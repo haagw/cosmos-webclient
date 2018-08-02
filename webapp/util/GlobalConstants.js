@@ -19,9 +19,7 @@ sap.ui.define([
 		//Constants for oAuth2
 		CLIENT_ID : "cosmos-webclient",
 		CLIENT_SECRET : "cosmospw",
-		GRANT_TYPE: "password"
-		
+		GRANT_TYPE:{PASSWORD: "password", REFRESH_TOKEN: "refresh_token"},
+		STORAGE_BEARER: "bearer"
 	};
 });
-
-

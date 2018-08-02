@@ -52,23 +52,31 @@
 						<OverflowToolbarLayoutData priority="Low" />
 					</layoutData>
 				</Button>
-				<Button text="Tools" type="Transparent">
+				<MenuButton text="{i18n>help}" type="Transparent">
+					<menu>
+						<Menu itemSelected="onMenuHelpAction" >
+							<items>
+								<MenuItem id="documentation" text="{i18n>documentation}" />
+								<MenuItem id="kbshortcuts" text="{i18n>kbshortcuts}" />
+								<MenuItem id="about" text="{i18n>about}" startsSection="true" />
+							</items>
+						</Menu>
+					</menu>
 					<layoutData>
-						<OverflowToolbarLayoutData priority="Low" />
+						<OverflowToolbarLayoutData priority="NeverOverflow" />
 					</layoutData>
-				</Button>
+				</MenuButton>
 				<tnt:ToolHeaderUtilitySeparator />
 				<ToolbarSpacer>
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="20px" />
 					</layoutData>
 				</ToolbarSpacer>
-				<Button text="{i18n>login}" type="Transparent" press="handleUserNamePress">
+				<Button id="btnAuth" text="{i18n>login}" type="Transparent" press="handleAuthPress">
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow" />
 					</layoutData>
 				</Button>
-
 			</tnt:ToolHeader>
 		</tnt:header>
 		<tnt:sideContent>
@@ -114,6 +122,7 @@
 						}">
 						<tnt:NavigationListItem
 							key="{side>key}"
+							visible="{side>visible}"
 							text="{
 								path: 'side>key',
 								formatter: '.i18nTranslater.doTranslate'

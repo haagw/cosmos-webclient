@@ -18,7 +18,7 @@
 				"uri": "http://localhost:8088/",
 				"type": "JSON",
 				"settings": {
-					"localUri" : "/"
+					"localUri": "/"
 				}
 			}
 		}
@@ -38,7 +38,10 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": ["sap_hcb", "sap_belize"]
+		"supportedThemes": [
+			"sap_belize",
+			"sap_bluecrystal"
+		]
 	},
 	"sap.ui5": {
 		"rootView": {
@@ -74,13 +77,15 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"config": {
-	        "lat": 1,
-	        "lon": 2
-    	}
+			"lat": 1,
+			"lon": 2
+		}
 	}
 }
