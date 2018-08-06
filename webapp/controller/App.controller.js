@@ -33,11 +33,23 @@ sap.ui.define([
 		onInit: function() {
 			appController = this;
 
+			//Set the popover template for the userinfo
 			this._oPopover = sap.ui.xmlfragment("com.canon.cosmos.webclient.view.LogoutPopover", this);
 			this.getView().addDependent(this._oPopover);
-
+			
+			var btnAuth = appController.byId("btnAuth");
+			btnAuth.setText(i18nTranslater.doTranslate("login"));
+			
+			//Handle the srorage values
 			var oBearerData = OAuthService.getInstance().getBearerFromLocalStorage();
 			if(oBearerData !== null){
+				var oUserInformation = OAuthService.getInstance().getUserInformationFromLocalStorage();
+				if(oUserInformation !== null){
+					var oUserInformationModel = new JSONModel(oUserInformation);
+					this.getView().setModel(oUserInformationModel, "userdata");
+					btnAuth.setIcon("sap-icon://employee");
+					btnAuth.setText(oUserInformationModel.getProperty("/user_name"));
+				}
 				this.setUserInformation(oBearerData);
 			}
 
@@ -106,17 +118,34 @@ sap.ui.define([
 		},
 
 		handleLogout: function() {
+			var sideContentModel = appController.getView().getModel("side");
+			sideContentModel.setProperty("/navigation/1/visible", false);
+			sideContentModel.setProperty("/navigation/2/visible", false);
+			sideContentModel.setProperty("/navigation/3/visible", false);
+			
 			sap.m.MessageToast.show("Handle Logout", {});
 		},
 		handleLogin: function() {
+			//appController.getView().byId("jobManager").setVisible(true);
+			
+			var sideContentModel = appController.getView().getModel("side");
+			
+			
+			sideContentModel.setProperty("/navigation/1/visible", true);
+			sideContentModel.setProperty("/navigation/2/visible", true);
+			sideContentModel.setProperty("/navigation/3/visible", true);
 			sap.m.MessageToast.show("Handle Login", {});
 		},
 
+		/** 
+		 * Sets the actual user information for the given bearer
+		 * @param {object} oBearerData The bearer data from the store
+		 */
 		setUserInformation: function(oBearerData) {
 			var oBearerModel = new JSONModel();
 			oBearerModel.setData(oBearerData);
 
-			var serviceCallback = {
+			var getUserInformationCallback = {
 				sender: appController.getView(),
 				onError: function(oEventError) {
 					$.sap.log.debug("Username can not be set");
@@ -130,13 +159,12 @@ sap.ui.define([
 				}
 			};
 
-			OAuthService.getInstance().getUserInformation(oBearerModel, serviceCallback);
+			OAuthService.getInstance().getUserInformation(oBearerModel, getUserInformationCallback);
 
 		},
 
 		onMenuHelpAction: function(oEvent) {
 			
-			this.doTest();
 			
 			
 			var oItem = oEvent.getParameter("item"),
@@ -156,7 +184,27 @@ sap.ui.define([
 		},
 		
 		doTest: function(){
-			window.prompt("Bitte bestätigen sie Ihren Acount!\nDasPasswort wird in Klarschrift angezeigt");
+			var checkBearerCallback = {
+				sender : this.getView(),
+				onSuccess: function(oEvent){
+					$.sap.log.debug("*** LOAD BEARER:");
+				},
+				onError: function(){
+					$.sap.log.debug("*** LOAD BEARER: ");
+				}
+			};
+			
+			var oBearerModel = new JSONModel({
+			    "access_token": "869b554b-67de-498a-9003-d5c10915be64",
+			    "token_type": "bearer",
+			    "refresh_token": "74d6cb41-82bb-46dc-97a8-f35968478e191",
+			    "expires_in": 299,
+			    "scope": "private public",
+			    "access_token_valid" : false
+			});
+			
+			
+			OAuthService.getInstance().checkBearer(oBearerModel, checkBearerCallback);
 		},
 
 		/**

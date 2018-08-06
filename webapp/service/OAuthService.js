@@ -6,14 +6,20 @@ sap.ui.define([
 	"sap/ui/base/Object",
 	"sap/ui/model/json/JSONModel",
 	"com/canon/cosmos/webclient/util/GlobalConstants",
-	"com/canon/cosmos/webclient/util/GlobalProperties"
-], function (Object,JSONModel, GlobalConstants, GlobalProperties){
+	"com/canon/cosmos/webclient/util/GlobalProperties",
+	"sap/m/Dialog",
+	"sap/m/Label",
+	"sap/m/Input",
+	"sap/m/Button",
+	"sap/m/MessageStrip",
+	"com/canon/cosmos/webclient/formatter/i18nTranslater",
+], function (Object,JSONModel, GlobalConstants, GlobalProperties, Dialog, Label, Input, Button, MessageStrip, i18nTranslater){
 	"use strict";
 	var instance;
 	var storage;
 	
 	/**
-	 * @class Manages the OAuth2 communication
+	 * @class Manages the OAuth2 communication. 
 	 * @author Wolfgang Haag
 	 * @public
 	 * @name com.canon.cosmos.webclient.service.OAuthService
@@ -21,23 +27,26 @@ sap.ui.define([
 	var Service = Object.extend("com.canon.cosmos.webclient.service.OAuthService", {
 
 		/** 
-		 * Constructor
+		 * Constructor Initialize the storage
 		 * @public
 		 */
-		constructor: function() {
+		constructor: function(){ 
+		
 			$.sap.require("jquery.sap.storage");
 			storage = $.sap.storage($.sap.storage.Type.local);
+			
 		},
 
 		/** 
-		 * Gets a bearer token from the server
+		 * Gets a bearer token from the server with the password grant. For each servercall the method
+		 * checkBearer must be called. This guarants a correct token. It is recomended to set the access_token
+		 * to a small expiration time like 60-300 seconds. The refresh_token can have a lifetime of 7776000 seconds (3 month)
 		 * @public
 		 * @param {string}  username The username
 		 * @param {string}  password The pasword
-		 * @param {object}  serviceCallback The object with the callback function onError, onSuccess and the sender
-
+		 * @param {object}  getBearerCallback The object with the callback function onError, onSuccess and the sender
 		 */
-		getBearer: function(username, password, serviceCallback) {
+		getBearer: function(username, password, getBearerCallback) {
 			
 			var uri = GlobalProperties.getWebApiDataSource().getProperty("/uri") + "cosmos-webauth/oauth/token";
 			var parameters = "grant_type=" + GlobalConstants.GRANT_TYPE.PASSWORD +
@@ -48,89 +57,159 @@ sap.ui.define([
 
 			var oBearer = new JSONModel();
 			oBearer.attachRequestCompleted(function (oEvent){
-				oEvent.sender = serviceCallback.sender;
+				
+				oEvent.sender = getBearerCallback.sender;
 				if(oEvent.getParameters().success === false){
-					serviceCallback.onError(oEvent);
+					getBearerCallback.onError(oEvent);
 				}else{
-					serviceCallback.onSuccess(oEvent);
+					getBearerCallback.onSuccess(oEvent);
 				}
+				
 			});
 			oBearer.loadData(uri, parameters, true, "POST", false, false, null); 
 			
 		},
 
-
-		
 		/** 
-		 * Gets the User Information
+		 * Gets the User Information from the auth server by an access token
 		 * @public
-		 * @param {object} oBearer a valid bearer 
-		 * @returns {object} a promised user information
+		 * @param {object} oBearerModel a valid bearer 
+		 * @param {object} getUserInformationCallback The object with the callback function onError, onSuccess and the sender
 		 */
-		getUserInformation : function (oBearerModel, serviceCallback){
+		getUserInformation : function (oBearerModel, getUserInformationCallback){
 			
-			var oBearerModelResult = instance.checkBearer(oBearerModel);
-			if(oBearerModelResult === null){
-				serviceCallback.onError();
-				return;
-			}else{
-				var uri = GlobalProperties.getWebApiDataSource().getProperty("/uri") + "cosmos-webauth/oauth/check_token";
-				var parameters = "token="  + oBearerModelResult.getProperty("/access_token");
-	
-				var oUserInfoModel = new JSONModel();
-				oUserInfoModel.attachRequestCompleted(function (oEvent){
-					oEvent.sender = serviceCallback.sender;
-					if(oEvent.getParameters().success === false){
-						serviceCallback.onError(oEvent);
-					}else{
-						serviceCallback.onSuccess(oEvent);
-					}
-				});
-				oUserInfoModel.loadData(uri, parameters, true, "GET", false, false, null); 
-			}
-
+			var checkBearerCallback = {
+				sender: getUserInformationCallback.sender,
+				onSuccess: function(oSubBearerModel){
+					
+					var uri = GlobalProperties.getWebApiDataSource().getProperty("/uri") + "cosmos-webauth/oauth/check_token";
+					var parameters = "token="  + oSubBearerModel.getProperty("/access_token");
+					var oUserInfoModel = new JSONModel();
+					oUserInfoModel.attachRequestCompleted(function (oEventSub){
+						oEventSub.sender = getUserInformationCallback.sender;
+						if(oEventSub.getParameters().success === false){
+							getUserInformationCallback.onError(oEventSub);
+						}else{
+							storage.put(GlobalConstants.STORAGE_USERINFO,oEventSub.getSource().getData());
+							getUserInformationCallback.onSuccess(oEventSub);
+						}
+					});
+					oUserInfoModel.loadData(uri, parameters, true, "GET", false, false, null); 
+					
+				},
+				onError: function(oError){
+					
+					getUserInformationCallback.onError(oError);
+					
+				}
+				
+			};
+			instance.checkBearer(oBearerModel, checkBearerCallback);
+			
 		},
 		
 		/** 
-		 * Ccecks the bearer and if not valid it gets a new one. If refresh token also not valid
+		 * Checks the bearer and if not valid it gets a new one. If refresh token also not valid
 		 * a confirm dialog pops up. This must be done for each secured call to the server
 		 * @public
-		 * @param {object} oBearer The current bearer
-		 * @returns {object} a promised bearer 
+		 * @param {object} oBearerModel The current berare model
+		 * @param {object} checkBearerCallback A callback handler to push the results to 
 		 */
-		checkBearer: function(oBearerModel){
+		checkBearer: function(oBearerModel, checkBearerCallback){
 
 			if(oBearerModel.getProperty("/access_token_valid") === false){
-				var oResult = instance._getNewBearer(oBearerModel);
-				if(oResult !== null){
-					instance.setBearerToLocalStorage(oResult.getData());
-				}else{
-					//Confirm dialog must popup
-					
-					//Confirm dialog must getBack an new Bearer
-					
-					
-					//Bearer must set to storage
-					//instance.setBearerToLocalStorage(oResult.getData());
-					
-					//falls Abbruch
-					instance.removeBearerFromLocalStorage();
-				}
-				return oResult;
+				var getNewBearerCallback = {
+					onSuccess: function(newBearerModel){
+						
+						instance.setBearerToLocalStorage(newBearerModel.getData());
+						checkBearerCallback.onSuccess(newBearerModel);
+						
+					},
+					onError: function(errorObject){
+						
+						//Confirm dialog must popup
+						var dialog = new Dialog({
+							title: i18nTranslater.doTranslate("confirmLogin"),
+							type: "Message",
+							content : [
+									new MessageStrip("msErrorMessage",{
+										text : "",
+										type : "Error",
+										visible : false, 
+										showIcon : true,
+										showCloseButton : true 
+									}),
+									new Label({ text: i18nTranslater.doTranslate("password"), labelFor: "txtPassword" }),
+									new Input("txtPassword", {
+										width: "100%",
+										type: "Password"
+									})
+	
+								],
+								beginButton: new Button({
+									text: i18nTranslater.doTranslate("confirm"),
+									press: function (event) {
+										//Get the new Bearer
+										var password = sap.ui.getCore().byId("txtPassword").getValue();
+										if(password.length === 0){
+											var msErrorMessage = sap.ui.getCore().byId("msErrorMessage");
+											msErrorMessage.setText(i18nTranslater.doTranslate("validationFailurePassword"));
+											msErrorMessage.setVisible(true);
+											return;
+										}
+										
+										var username = instance.getUserInformationFromLocalStorage().user_name;
+										var getBearerCallBack = {
+											onError: function(oEvent){
+												var errorobject = oEvent.getParameters().errorobject;
+												msErrorMessage = sap.ui.getCore().byId("msErrorMessage");
+												msErrorMessage.setText(errorobject.responseText);
+												msErrorMessage.setVisible(true);
+											},
+											onSuccess: function(oEvent){
+												getNewBearerCallback.onSuccess(oEvent.getSource());
+												dialog.close();
+											}
+										};
+										instance.getBearer(username, password, getBearerCallBack );
+									}
+									
+								}),
+								endButton: new Button({
+									text: i18nTranslater.doTranslate("cancel"),
+									press: function () {
+										//Logout the user
+										instance.removeBearerFromLocalStorage();
+										checkBearerCallback.sender.getController().onLogoutPressed();
+										dialog.close();
+									}
+								}),
+								afterClose: function() {
+									
+									dialog.destroy();
+									
+								}
+							
+						});
+						dialog.open();
+					}
+				};
+				instance._getNewBearer(oBearerModel, getNewBearerCallback);
 			}else{
-				return oBearerModel;
+				checkBearerCallback.onSuccess(oBearerModel);
 			}
+			
 		},
 		
 		
 		/** 
 		 * Gets a bearer token from the server. This is a synch call because of handle it easy
 		 * @private
-		 * @param {string}  oBearer The Refreshtoken
-		 * @returns {object} a promised token 
+		 * @param {string}  oBearerModel The bearer model
+		 * @param {object} getNewBearerCallback A callback handler to push the results to 
 		 */
-		_getNewBearer: function(oBearerModel) {
-/*			var oResult;
+		_getNewBearer: function(oBearerModel, getNewBearerCallback) {
+			
 			var uri = GlobalProperties.getWebApiDataSource().getProperty("/uri") + "cosmos-webauth/oauth/token";
 			var parameters = "grant_type=" + GlobalConstants.GRANT_TYPE.REFRESH_TOKEN +
 			"&client_id=" + GlobalConstants.CLIENT_ID +
@@ -139,51 +218,30 @@ sap.ui.define([
 
 			var oBearer = new JSONModel();
 			oBearer.attachRequestCompleted(function (oEvent){
-				oResult = oEvent;
-			});
-			oBearer.loadData(uri, parameters, true, "POST", false, false, null); 
-			
-			return oResult;
-			
-			
-			*/
-			
-			var oResult;
-			var baseUri = GlobalProperties.getWebApiDataSource().getProperty("/uri");
-			var payload = "&grant_type=" + GlobalConstants.GRANT_TYPE.REFRESH_TOKEN +
-				"&client_id=" + GlobalConstants.CLIENT_ID +
-				"&client_secret=" + GlobalConstants.CLIENT_SECRET +
-				"&refresh_token=" + oBearerModel.getProperty("/refresh_token");
-
-			$.sap.log.debug("*** GET NEW BEARER WITH REFRESH_TOKEN: " + oBearerModel.getProperty("/refresh_token"));
-
-			$.ajax({
-				url: baseUri + "cosmos-webauth/oauth/token",
-				type: "post",
-				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-				data: payload,
-				dataType: "json",
-				async:false,
-				success: function(oBearerResult) {
-					$.sap.log.debug("*** NEW BEARER: " + JSON.stringify(oBearerResult));
-					var m = new JSONModel();
-					m.setData(oBearerResult);
-					oResult = m;
-				},
-				error: function(err) {
-					$.sap.log.error(err.responseText);
-					oResult = null;
+				
+				if(oEvent.getParameters().success === false){
+					//Callback with the errorobject
+					//message : "error"
+					//responseTeext : "{...}"
+					//statusCode : 400
+					//StatusText : "BadRequest"
+					getNewBearerCallback.onError(oEvent.getParameters().errorobject);
+				}else{
+					//Callback with the newBearerModel
+					getNewBearerCallback.onSuccess(oEvent.getSource());
 				}
 			});
-			return oResult;
+			oBearer.loadData(uri, parameters, true, "POST", false, false, null); 
+
 		},
 
 		/** 
 		 * Gets the extended bearer model from local storage
 		 * @public
-		 * @returns {object} The bearer
+		 * @returns {object} The bearer data
 		 */
 		getBearerFromLocalStorage: function() {
+			
 			var oBearerData = storage.get(GlobalConstants.STORAGE_BEARER);
 			if (oBearerData === null) {
 				return null;
@@ -199,11 +257,19 @@ sap.ui.define([
 			}
 		},
 		
+		
+		/** 
+		 * Get the user information from store
+		 * @returns {object} The user information
+		 */
+		getUserInformationFromLocalStorage : function(){
+			return storage.get(GlobalConstants.STORAGE_USERINFO);
+		},
+		
 		/** 
 		 * Sets the Bearer fo the local storage
 		 * @public
-		 * @param {object} oBearer The Bearer
-		 * @returns {object} The bearer
+		 * @param {object} oBearerData The Bearer data
 		 */
 		setBearerToLocalStorage:function(oBearerData){
 		  	//Compute access_token expire date
@@ -222,7 +288,9 @@ sap.ui.define([
 		removeBearerFromLocalStorage: function(){
 			$.sap.log.debug("*** REMOVE BEARER");
 			storage.remove(GlobalConstants.STORAGE_BEARER);
+			storage.remove(GlobalConstants.STORAGE_USERINFO);
 		}
+		
 	});
 
 	return {

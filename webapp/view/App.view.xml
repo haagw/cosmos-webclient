@@ -17,7 +17,7 @@
 					</layoutData>
 				</Button>
 				<ToolbarSpacer width="20px" />
-				<Button text="File" type="Transparent">
+				<Button text="Test" type="Transparent" press="doTest" >
 					<layoutData>
 						<OverflowToolbarLayoutData priority="Low" />
 					</layoutData>
@@ -72,7 +72,7 @@
 						<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="20px" />
 					</layoutData>
 				</ToolbarSpacer>
-				<Button id="btnAuth" text="{i18n>login}" type="Transparent" press="handleAuthPress">
+				<Button id="btnAuth"  type="Transparent" press="handleAuthPress">
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow" />
 					</layoutData>
