@@ -3,42 +3,28 @@
 		<content>
 			<f:Form id="form" editable="true" width="100%" >
 			    <f:layout>
-                    <f:ResponsiveGridLayout
-						labelSpanXL="3"
-						labelSpanL="3"
-						labelSpanM="3"
-						labelSpanS="12"
-						adjustLabelSpan="false"
-						emptySpanXL="4"
-						emptySpanL="4"
-						emptySpanM="4"
-						emptySpanS="0"
-						columnsXL="1"
-						columnsL="1"
-						columnsM="1"
-						singleContainerFullSize="false" />
+                    <f:ResponsiveGridLayout />
                 </f:layout>
                 <f:formContainers>
                 	<f:FormContainer>
                 		<f:FormElement>
             			    <MessageStrip
             			    	id="loginErrorMessage"
-								text="{path:'input>/ErrorText'}"
+								text="{input>/errorText}"
 								type="Error"
-								visible= "{path:'input>/ErrorVisible'}"
+								visible= "{=${input>/errorText}.length > 0}" 
 								showIcon="true"
-								showCloseButton="true"
+								showCloseButton="false"
 								class="sapUiMediumMarginBottom">
 							</MessageStrip>
                 		</f:FormElement>
-                		 <f:FormElement label="{i18n>username}">
+                		 <f:FormElement label="{i18n>userName}">
                 		 	 <f:fields>
                 		 	 	<Input
                                     id="inputUser" 
-                                    editable = "{path : 'input>/UserValueEditable'}"
                                     type="Text" 
                                     value="{
-                                        path: 'input>/UserValue',
+                                        path: 'input>/userValue',
                                         type: 'sap.ui.model.type.String',
                                         constraints: {
                                             minLength: 1
@@ -52,7 +38,7 @@
                                     id="inputPassword" 
                                     type="Password" 
                                     value="{
-                                        path: 'input>/PasswordValue',
+                                        path: 'input>/passwordValue',
                                         type: 'sap.ui.model.type.String',
                                         constraints: {
                                             minLength: 1
@@ -65,10 +51,10 @@
 			</f:Form>
 		</content>
 		<beginButton>
-			<Button text="{i18n>close}" press="onCloseButtonPressed"/>
+			<Button text="{i18n>close}"  press="onCloseButtonPressed"/>
 		</beginButton>
 		<endButton>
-			<Button id="btnLogin" text="{i18n>login}" enabled="true"  press="onLoginButtonPressed"/>
+			<Button id="btnLogin" text="{i18n>login}"  press="onLoginButtonPressed"/>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

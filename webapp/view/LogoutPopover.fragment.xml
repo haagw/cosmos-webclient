@@ -2,7 +2,7 @@
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core">
 	<Popover
-		title="{i18n>userinfo}"
+		title="{i18n>userInfo}"
 		class="sapUiContentPadding"
 		placement="Bottom"
 		initialFocus="btnLogout"

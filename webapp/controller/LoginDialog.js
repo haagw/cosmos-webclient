@@ -86,7 +86,7 @@ sap.ui.define([
 							$.when(promise)
 			        		.done( function(oModelBearer) {
 								OAuthService.getInstance().setBearerToLocalStorage(oModelBearer);
-								callback.onLoginDone();
+								callback.onAuthDone();
 								oLoginErrorMessage.setVisible(false);
 								//oLoginDialog.getModel().setData(null);
 								oLoginDialog.close();

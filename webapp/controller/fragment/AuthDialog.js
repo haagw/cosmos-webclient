@@ -1,75 +1,89 @@
 sap.ui.define([
 	"sap/ui/base/ManagedObject",
 	"sap/ui/model/json/JSONModel",
-	"sap/ui/model/BindingMode",
 	"sap/ui/core/ValueState",
 	"com/canon/cosmos/webclient/util/FormsValidator",
-	"com/canon/cosmos/webclient/service/OAuthService",
-	"com/canon/cosmos/webclient/formatter/i18nTranslater"
-], function(ManagedObject, JSONModel, BindingMode, ValueState, FormsValidator, OAuthService, i18nTranslater){
+	"com/canon/cosmos/webclient/service/OAuthService"
+], function(ManagedObject, JSONModel, ValueState, FormsValidator, OAuthService){
 	
-	var oDialog;
 	
 	return ManagedObject.extend("com.canon.cosmos.webclient.controller.AuthDialog", {
 		
-		constructor: function(username) {
-			this.username = username;
+		/** 
+		 * Constructor
+		 * @param {sap.ui.core.mvc.View} oParentView - The view creates the dialog
+		 */
+		constructor: function(oParentView) {
+			this._oParentView = oParentView;
+			this._oAuthDialog = oParentView.byId("authDialog");
+			
+			// Attaches validation handlers
+            sap.ui.getCore().attachValidationError(function (oEvent) {
+                oEvent.getParameter("element").setValueState(ValueState.Error);
+            });
+            sap.ui.getCore().attachValidationSuccess(function (oEvent) {
+                oEvent.getParameter("element").setValueState(ValueState.None);
+            });
 		},
 		
-		init: function(){
-			
-		},
 		
-		open: function(callback) {
+		open: function() {
 			
+			if (!this._oAuthDialog) {
 			
-			var oFragmentController = {
-				onCloseButtonPressed: function() {
-					$.sap.log.info("****************************************");
-					//this.close();
-					//delete this;
-				},
-				onLoginButtonPressed: function(event){
-					if(	oDialog.getModel("input").getData().PasswordValue.length === 0 ||
-						oDialog.getModel("input").getData().UserValue.length === 0 ){
-					
-						oDialog.getModel("input").getData().ErrorVisible = true;	
-						oDialog.getModel("input").getData().ErrorText = "Bla";	
-						oDialog.getModel("input").setData(oDialog.getModel("input").getData());
+				var oFragmentController = {
+					onCloseButtonPressed: function(oEvent) {
+						$.sap.log.debug("Closing auth dialog");
+						sap.ui.getCore().getMessageManager().removeAllMessages();
+						oEvent.getSource().getParent().close();
+					},
+					onLoginButtonPressed: function(oEvent){
+						$.sap.log.debug("Handle login");
+						var formsValidator = new FormsValidator();
+						formsValidator.validate(oEvent.getSource().getParent());
+						if(formsValidator.isValid() === true){
+							var userValue = oEvent.getSource().getParent().getModel("input").getProperty("/userValue");
+							var passwordValue = oEvent.getSource().getParent().getModel("input").getProperty("/passwordValue");
+							var serviceCallback = {
+								sender : oEvent.getSource().getParent(),
+								onError : function(oEventError){
+									$.sap.log.debug("Handle Error");
+									var oErrorObject = oEventError.getParameters().errorobject;
+									if(oErrorObject.statusCode === 0){
+										$.sap.log.debug(oErrorObject.statusText);
+										oEventError.sender.getModel("input").setProperty("/errorText",oErrorObject.statusText);
+					        		}else{
+					        			var responseJSON = new JSONModel();
+					        			responseJSON.setJSON(oErrorObject.responseText);
+					        			oEventError.sender.getModel("input").setProperty("/errorText", responseJSON.getProperty("/error") + "\n" + responseJSON.getProperty("/error_description") );
+					        		}
+								},
+								onSuccess : function(oEvenSuccess){
+									var appView = oEvenSuccess.sender.getParent();
+									OAuthService.getInstance().setBearerToLocalStorage(oEvenSuccess.getSource().getData());
+									appView.getController().setUserInformation(OAuthService.getInstance().getBearerFromLocalStorage());
+									oEvenSuccess.sender.close();
+								}
+							};
+							OAuthService.getInstance().getBearer(userValue, passwordValue, serviceCallback); 
+							
+						}
 					}
-				
-					
-				}
-			};
+				};
+							// create dialog via fragment factory
+				this._oAuthDialog = sap.ui.xmlfragment(this._oParentView.getId(), "com.canon.cosmos.webclient.view..fragment.AuthDialog", oFragmentController);
+				// connect dialog to the root view of this component (models, lifecycle)
+				this._oParentView.addDependent(this._oAuthDialog);
+				// forward compact/cozy style into dialog
+				jQuery.sap.syncStyleClass(this._oParentView.getController().getContentDensityClass(), this._oParentView, this._oAuthDialog);
+
 			
-			oDialog= sap.ui.xmlfragment("com.canon.cosmos.webclient.view..fragment.AuthDialog", oFragmentController);
-			oDialog.setModel(sap.ui.getCore().getModel("i18n"), "i18n");
-			this.oModel = new JSONModel();
-			this.oModel.setData({
-				UserValue: "",
-				PasswordValue: "",
-				UserValueEditable: true,
-				ErrorVisible: false,
-				ErrorText: ""
-			});
-			
-			oDialog.setModel(this.oModel, "input");
-			
-			if(this.username !== undefined){
-				oDialog.getModel("input").getData().UserValue = this.username;
-				oDialog.getModel("input").getData().UserValueEditable = false;
-				oDialog.getModel("input").setData(oDialog.getModel("input").getData());
 			}
-			
 
-
-			oDialog.open();
-		},
-		
-		onCloseButtonPressed : function(){
-			
+			var inputModel = new JSONModel({"userValue": "", "passwordValue" : "", "errorText" : ""});
+			this._oAuthDialog.setModel(inputModel, "input"); 
+			this._oAuthDialog.open();
 		}
-		
 		
 	});
 });
