@@ -1,0 +1,31 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<f:SimpleForm editable="true"
+			layout="ResponsiveGridLayout"
+			title="{i18n>settingsAppearance}"
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="3"
+			adjustLabelSpan="false"
+			emptySpanXL="1"
+			emptySpanL="1"
+			emptySpanM="1"
+			emptySpanS="1"
+			columnsXL="8"
+			columnsL="8"
+			columnsM="8"
+			singleContainerFullSize="false" 
+			class="sapUiTinyMargin" >
+			<f:content>
+				<Label text="{i18n>settingsAppearanceTheme}" />
+				<Select id="selDetailAppearanceTheme" selectedKey="{/selDetailAppearanceThemeCurrentValue}" >
+					<items>
+						<core:Item key="sap_belize" text="Belize" />
+						<core:Item key="sap_bluecrystal" text="Bluecrystal" />
+						<core:Item key="sap_hcb" text="Dark" />
+						
+					</items>
+				</Select>
+			</f:content>
+		</f:SimpleForm>
+</core:FragmentDefinition>

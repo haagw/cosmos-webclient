@@ -28,8 +28,8 @@
   },
   "translation": {
     "translationDomain": "",
-    "supportedLanguages": "en,fr,de",
-    "defaultLanguage": "en",
+    "supportedLanguages": "de,en,fr",
+    "defaultLanguage": "de",
     "defaultI18NPropertyFile": "i18n.properties",
     "resourceModelName": "i18n"
   },

@@ -1,0 +1,38 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<Dialog id="aboutDialog" title="{i18n>mnuHelpAbout}" contentHeight="400px" contentWidth="350px" >
+		<content>
+			<HBox justifyContent="Center" >
+				<Image src="image/cosmos_logo-transpa.png" width="150px" alt="COSMOS Logo" class="sapUiTinyMarginTop"/>
+			</HBox>
+			<f:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="6" labelSpanL="6" labelSpanM="6" labelSpanS="6"
+				adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="6" columnsL="6" columnsM="6" 
+				singleContainerFullSize="false">
+				<f:content>
+					<Label text="Client-Version"/>
+					<Text text="{informationList>/applicationVersion}"/>
+					<Label text="Server-Version"/>
+					<Text text="{informationList>/versionNumber}-{informationList>/buildNumber}"/>
+					<Label text="{i18n>aboutBuildYear}"/>
+					<Text text="{informationList>/buildYear}"/>
+					<Label text="{i18n>aboutNodeName}"/>
+					<Text text="{informationList>/nodeName}"/>
+					<Label text="{i18n>aboutSysConfig}"/>
+					<Text text="{informationList>/systemName}"/>
+					<Label text="{i18n>aboutLicenceType}"/>
+					<Text text="{informationList>/licenseType}"/>
+					<Label text="{i18n>aboutLicenceExpires}"/>
+					<Text text="{informationList>/licenseExpires}"/>
+				</f:content>
+			</f:SimpleForm>
+			<HBox justifyContent="Center"   >
+				<Label textAlign="Center" wrapping="true"  text="&#169; {parts: ['i18n>aboutText','informationList>/currentYear'] ,formatter: 'jQuery.sap.formatMessage'}"  />
+			</HBox>
+			<HBox justifyContent="Center"  >
+				<Link text="{i18n>aboutLink}" target="_blank" href="https://global.canon/en/index.html" class="sapUiTinyMargin" />
+			</HBox>
+	</content>
+		<beginButton>
+			<Button text="{i18n>close}" press="onCloseButtonPressed"/>
+		</beginButton>
+	</Dialog>
+</core:FragmentDefinition>

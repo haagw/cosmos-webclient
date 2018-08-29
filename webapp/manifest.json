@@ -7,7 +7,7 @@
 		"title": "{{appTitle}}",
 		"description": "{{appDescription}}",
 		"applicationVersion": {
-			"version": "1.0.0"
+			"version": "1.0.0-SNAPSHOT"
 		},
 		"sourceTemplate": {
 			"id": "ui5template.basicSAPUI5ApplicationProject",
@@ -36,12 +36,9 @@
 		"deviceTypes": {
 			"desktop": true,
 			"tablet": true,
-			"phone": true
+			"phone": false
 		},
-		"supportedThemes": [
-			"sap_belize",
-			"sap_bluecrystal"
-		]
+		"supportedThemes": ["sap_belize", "sap_bluecrystal", "sap_hcb"]
 	},
 	"sap.ui5": {
 		"rootView": {
@@ -77,14 +74,11 @@
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"config": {
-			"refreshTokenLifeTime": 7889400,
 			"lon": 2
 		}
 	}

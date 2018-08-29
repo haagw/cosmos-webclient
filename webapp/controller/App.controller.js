@@ -3,18 +3,14 @@
  *  Internet : http://www.canon.com
  */
 sap.ui.define([
-	"sap/ui/core/Fragment",
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
-	"sap/m/Popover",
-	"sap/m/MessageBox",
-	"sap/m/Button",
 	"com/canon/cosmos/webclient/formatter/i18nTranslater",
 	"com/canon/cosmos/webclient/service/OAuthService",
 	"com/canon/cosmos/webclient/controller/fragment/AuthDialog"
-], function(Fragment, Controller, JSONModel, Popover, MessageBox, Button, i18nTranslater, OAuthService, AuthDialog) {
+], function(Controller, JSONModel, i18nTranslater, OAuthService, AuthDialog) {
 	"use strict";
-
+	
 	//Reference to the controller
 	var appController;
 	/**
@@ -32,13 +28,14 @@ sap.ui.define([
 
 		onInit: function() {
 			appController = this;
+			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
 
 			//Set the popover template for the userinfo
 			this._oPopover = sap.ui.xmlfragment("com.canon.cosmos.webclient.view.LogoutPopover", this);
 			this.getView().addDependent(this._oPopover);
 			
 			var btnAuth = appController.byId("btnAuth");
-			btnAuth.setText(i18nTranslater.doTranslate("login"));
+			//btnAuth.setText(i18nTranslater.doTranslate("login"));
 			
 			//Handle the srorage values
 			var oBearerData = OAuthService.getInstance().getBearerFromLocalStorage();
@@ -53,17 +50,6 @@ sap.ui.define([
 				this.setUserInformation(oBearerData);
 			}
 
-		},
-
-		getContentDensityClass: function() {
-			if (!this._sContentDensityClass) {
-				if (!sap.ui.Device.support.touch) {
-					this._sContentDensityClass = "sapUiSizeCompact";
-				} else {
-					this._sContentDensityClass = "sapUiSizeCozy";
-				}
-			}
-			return this._sContentDensityClass;
 		},
 
 		onAfterRendering: function() {
@@ -171,16 +157,18 @@ sap.ui.define([
 				sItemPath = "";
 			if (oItem instanceof sap.m.MenuItem) {
 				sItemPath = oItem.getId();
+				if(sItemPath.includes("mnuHelpAbout")){
+					$.sap.require("com.canon.cosmos.webclient.controller.fragment.AboutDialog");
+					var aboutDialog = new com.canon.cosmos.webclient.controller.fragment.AboutDialog(this.getView());
+					aboutDialog.open();
+				}else if(sItemPath.includes("mnuHelpSettings")){
+					$.sap.require("com.canon.cosmos.webclient.controller.fragment.setting.Dialog");
+					var settingsDialog = new com.canon.cosmos.webclient.controller.fragment.setting.Dialog(this.getView());
+					settingsDialog.open();
+				}
 			}
 
-			MessageBox.show(sItemPath, {
-				icon: sap.m.MessageBox.Icon.INFORMATION,
-				title: "Information",
-				actions: [MessageBox.Action.CLOSE],
-				id: "mboxAbout",
-				styleClass: "sapUiSizeCompact",
-				contentWidth: "100px"
-			});
+
 		},
 		
 		doTest: function(){

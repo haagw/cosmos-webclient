@@ -1,0 +1,48 @@
+{
+	"masterTree" :
+	[{
+		"id": "titemDetailGlobal",
+		"key": "settingsGlobal",
+		"selected" : true,
+		"refControls": "DetailGlobalControls",
+		"nodes":
+		[
+			{
+				"id": "titemDetailAppearance",
+				"key": "settingsAppearance",
+				"ref": "sap-icon://my-view",
+				"selected" : false,
+				"refControls": "DetailAppearanceControls"
+			},
+			{
+				"id": "titemDetailGlobalization",
+				"key": "settingsGlobalization",
+				"ref": "sap-icon://world",
+				"selected" : false,
+				"refControls": "DetailGlobalizationControls"
+			}
+		]
+	}],
+	"DetailGlobalControls":[
+		{
+			"id":"chkDetailGlobalClear",
+			"defaultValue":false,
+			"currentValue": false
+		}
+	],
+	"DetailAppearanceControls":[
+		{
+			"id":"selDetailAppearanceTheme",
+			"defaultValue":"sap_belize",
+			"currentValue": "sap_belize"
+		}
+	],
+	"DetailGlobalizationControls":[
+		{
+			"id":"selDetailGlobalizationLanguage",
+			"defaultValue":"browser",
+			"currentValue": "browser"
+		}
+	]
+
+}

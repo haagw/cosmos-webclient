@@ -5,11 +5,12 @@
 		   xmlns:html="http://www.w3.org/1999/xhtml"
 		   xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
 		   controllerName="com.canon.cosmos.webclient.controller.App">
-	<tnt:ToolPage id="app">
+	<tnt:ToolPage id="app" >
 		<tnt:header>
 			<tnt:ToolHeader>
-				<Button id="sideNavigationToggleButton"
+				<Button id= "sideNavigationToggleButton"
 						icon="sap-icon://menu2"
+						tooltip = "Side Navigation"
 						type="Transparent"
 						press="onSideNavButtonPress">
 					<layoutData>
@@ -52,13 +53,14 @@
 						<OverflowToolbarLayoutData priority="Low" />
 					</layoutData>
 				</Button>
-				<MenuButton text="{i18n>help}" type="Transparent">
+				<MenuButton text="{i18n>mnuHelp}" type="Transparent">
 					<menu>
 						<Menu itemSelected="onMenuHelpAction" >
 							<items>
-								<MenuItem id="documentation" text="{i18n>documentation}" />
-								<MenuItem id="kbshortcuts" text="{i18n>kbshortcuts}" />
-								<MenuItem id="about" text="{i18n>about}" startsSection="true" />
+								<MenuItem id="mnuHelpDocumentation" text="{i18n>mnuHelpDocumentation}" />
+								<MenuItem id="mnuHelpKbshortcuts" text="{i18n>mnuHelpKbshortcuts}" />
+								<MenuItem id="mnuHelpSettings" text="{i18n>mnuHelpSettings}" />
+								<MenuItem id="mnuHelpAbout" text="{i18n>mnuHelpAbout}" startsSection="true" />
 							</items>
 						</Menu>
 					</menu>
@@ -72,7 +74,7 @@
 						<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="20px" />
 					</layoutData>
 				</ToolbarSpacer>
-				<Button id="btnAuth"  type="Transparent" press="handleAuthPress">
+				<Button id="btnAuth" text="{i18n>login}" type="Transparent" press="handleAuthPress" >
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow" />
 					</layoutData>

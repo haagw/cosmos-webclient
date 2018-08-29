@@ -21,7 +21,8 @@ sap.ui.define([
 		CLIENT_SECRET : "cosmospw",
 		GRANT_TYPE:{PASSWORD: "password", REFRESH_TOKEN: "refresh_token"},
 		STORAGE_BEARER: "bearer",
-		STORAGE_USERINFO: "userinfo"
+		STORAGE_USERINFO: "userinfo",
+		STORAGE_SETTINGS: "settings"
 		
 	};
 });

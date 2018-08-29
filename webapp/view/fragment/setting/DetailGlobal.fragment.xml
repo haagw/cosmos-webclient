@@ -1,0 +1,24 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<f:SimpleForm editable="true"
+			layout="ResponsiveGridLayout"
+			title="{i18n>settingsGlobal}"
+			labelSpanXL="6"
+			labelSpanL="6"
+			labelSpanM="6"
+			labelSpanS="6"
+			adjustLabelSpan="false"
+			emptySpanXL="0"
+			emptySpanL="0"
+			emptySpanM="0"
+			emptySpanS="0"
+			columnsXL="6"
+			columnsL="6"
+			columnsM="6"
+			singleContainerFullSize="false" 
+			class="sapUiTinyMargin" >
+			<f:content>
+				<Label text="{i18n>settingsGlobalClearStorage}" />
+				<CheckBox id="chkDetailGlobalClear" selected="{/chkDetailGlobalClearCurrentValue}" />
+			</f:content>
+		</f:SimpleForm>
+</core:FragmentDefinition>

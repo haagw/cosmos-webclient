@@ -1,0 +1,30 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<f:SimpleForm editable="true"
+			layout="ResponsiveGridLayout"
+			title="{i18n>settingsGlobalization}"
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="3"
+			adjustLabelSpan="false"
+			emptySpanXL="1"
+			emptySpanL="1"
+			emptySpanM="1"
+			emptySpanS="1"
+			columnsXL="8"
+			columnsL="8"
+			columnsM="8"
+			singleContainerFullSize="false" 
+			class="sapUiTinyMargin">
+			<f:content>
+				<Label text="{i18n>settingsGlobalizationLanguage}" />
+				<Select id="selDetailGlobalizationLanguage" selectedKey="{/selDetailGlobalizationLanguageCurrentValue}">
+					<items>
+						<core:Item key="browser" text="{i18n>settingsGlobalizationLanguageBrowser}" />
+						<core:Item key="english" text="{i18n>settingsGlobalizationLanguageEnglish}" />
+						<core:Item key="german" text="{i18n>settingsGlobalizationLanguageGerman}" />
+					</items>
+				</Select>
+			</f:content>
+		</f:SimpleForm>
+</core:FragmentDefinition>

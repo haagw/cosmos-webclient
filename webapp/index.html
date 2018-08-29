@@ -5,11 +5,30 @@
 
 		<title>COSMOS WebClient</title>
 
+	    <style>
+	      #spaloader {
+			    margin-left:auto;
+			    margin-right:auto;
+				width: 30px;
+				height: 30px;
+				border: 8px solid #000;
+				border-right-color: transparent;
+				border-radius: 50%;
+				box-shadow: 0 0 25px 2px #eee;
+			    animation: spin 1.5s linear infinite;
+			}
+			@keyframes spin	{
+				from { transform: rotate(0deg);   opacity: 0.2; }
+				50%  { transform: rotate(180deg); opacity: 1.0; }
+				to   { transform: rotate(360deg); opacity: 0.2; }
+			}
+	    </style>
+
 		<script id="sap-ui-bootstrap"
 			src="/resources/sap-ui-core.js"
 			data-sap-ui-theme="sap_belize"
 			data-sap-ui-xx-bindingSyntax="complex"
-			data-sap-ui-preload="async"
+			data-sap-ui-preload="synch"
 			data-sap-ui-xx-waitForTheme="true"
 			data-sap-ui-compatVersion="edge"
 			data-sap-ui-logLevel="DEBUG"
@@ -26,8 +45,7 @@
 			sap.ui.getCore().attachInit(function () {
 				sap.ui.require([
 					"sap/m/Page",
-					"sap/ui/core/ComponentContainer",
-					"sap/ui/thirdparty/sinon"
+					"sap/ui/core/ComponentContainer"
 				], function (Page, ComponentContainer) {
 					// initialize the UI component
 					new Page({
@@ -42,11 +60,24 @@
 					}).placeAt("content");
 				});
 			});
+			$("#splash-screen").remove();
 		</script>
 	</head>
 
 	<!-- UI Content -->
 	<body class="sapUiBody" id="content" role="application">
+		<div id="splash-screen" style="
+				    display: inline-block;
+				    position: fixed;
+				    top: 0;
+				    bottom: 0;
+				    left: 0;
+				    right: 0;
+				    width: 200px;
+				    height: 100px;
+				    margin: auto ">
+			<div id="spaloader"></div>
+		</div>
 	</body>
 
 </html>

@@ -164,7 +164,7 @@
 		"sap-no-sessionstorage": 2,
 		"no-trailing-spaces": 0,
 		"no-irregular-whitespace": 2,
-		"consistent-this": [1, "that"],
+		"consistent-this": [0, "that"],
 		"camelcase": 1,
 		"space-infix-ops": 1,
 		"no-fallthrough": 1,

@@ -75,9 +75,7 @@ sap.ui.define([
 				// connect dialog to the root view of this component (models, lifecycle)
 				this._oParentView.addDependent(this._oAuthDialog);
 				// forward compact/cozy style into dialog
-				jQuery.sap.syncStyleClass(this._oParentView.getController().getContentDensityClass(), this._oParentView, this._oAuthDialog);
-
-			
+				jQuery.sap.syncStyleClass(this._oParentView.getController().getOwnerComponent().getContentDensityClass(), this._oParentView, this._oAuthDialog);
 			}
 
 			var inputModel = new JSONModel({"userValue": "", "passwordValue" : "", "errorText" : ""});
