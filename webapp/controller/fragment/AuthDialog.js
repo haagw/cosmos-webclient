@@ -2,12 +2,12 @@ sap.ui.define([
 	"sap/ui/base/ManagedObject",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/ValueState",
-	"com/canon/cosmos/webclient/util/FormsValidator",
-	"com/canon/cosmos/webclient/service/OAuthService"
+	"com/oce/cosmos/util/FormsValidator",
+	"com/oce/cosmos/service/OAuthService"
 ], function(ManagedObject, JSONModel, ValueState, FormsValidator, OAuthService){
 	
 	
-	return ManagedObject.extend("com.canon.cosmos.webclient.controller.AuthDialog", {
+	return ManagedObject.extend("com.oce.cosmos.controller.AuthDialog", {
 		
 		/** 
 		 * Constructor
@@ -71,7 +71,7 @@ sap.ui.define([
 					}
 				};
 							// create dialog via fragment factory
-				this._oAuthDialog = sap.ui.xmlfragment(this._oParentView.getId(), "com.canon.cosmos.webclient.view..fragment.AuthDialog", oFragmentController);
+				this._oAuthDialog = sap.ui.xmlfragment(this._oParentView.getId(), "com.oce.cosmos.view..fragment.AuthDialog", oFragmentController);
 				// connect dialog to the root view of this component (models, lifecycle)
 				this._oParentView.addDependent(this._oAuthDialog);
 				// forward compact/cozy style into dialog

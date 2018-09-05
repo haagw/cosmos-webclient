@@ -35,6 +35,12 @@
 			"id":"selDetailAppearanceTheme",
 			"defaultValue":"sap_belize",
 			"currentValue": "sap_belize"
+		},
+		{
+			"id":"stiDetailAppearanceNotifications",
+			"defaultValue":"20",
+			"currentValue": "20"
+			
 		}
 	],
 	"DetailGlobalizationControls":[

@@ -4,13 +4,12 @@
  */
 sap.ui.define([
 	"sap/ui/base/ManagedObject",
-	"sap/ui/model/json/JSONModel",
-	"com/canon/cosmos/webclient/service/ServerService"
-], function(ManagedObject, JSONModel, ServerService){
+	"sap/ui/model/json/JSONModel"
+], function(ManagedObject, JSONModel){
 	
 	var that;
 	
-	return ManagedObject.extend("com.canon.cosmos.webclient.controller.fragment.AboutDialog", {
+	return ManagedObject.extend("com.oce.cosmos.controller.fragment.AboutDialog", {
 		
 		/** 
 		 * Constructor
@@ -52,35 +51,12 @@ sap.ui.define([
 					}
 				};
 				// creates the dialog via fragment factory
-				oAboutDialog = sap.ui.xmlfragment(this.oParentView .getId(), "com.canon.cosmos.webclient.view.fragment.AboutDialog", oFragmentController);
+				oAboutDialog = sap.ui.xmlfragment(this.oParentView .getId(), "com.oce.cosmos.view.fragment.AboutDialog", oFragmentController);
 				// connect dialog to the root view of this component (models, lifecycle)
 				this.oParentView .addDependent(oAboutDialog);
 				// forward compact/cozy style into dialog
             	jQuery.sap.syncStyleClass(this.oParentView .getController().getOwnerComponent().getContentDensityClass(), this.oParentView , oAboutDialog);
 				
-				//Callback from service
-				var getInformationListCallback = {
-					onError: function(oEventError) {
-						var errorobject = oEventError.getParameters().errorobject;
-						var responseText = errorobject.responseText === undefined ? "Error while getting the information list from the server!" : errorobject.responseText;
-						sap.m.MessageBox.error(errorobject.message, {
-							details: responseText,
-							contentWidth: "100px"
-					    });
-						
-						$.sap.log.error("Error while getting the information list from the server!");
-					},
-					onSuccess: function(oEvenSuccess) {
-						var model = oEvenSuccess.getSource();
-						model.setProperty("/currentYear", new Date().getFullYear());
-						var applicationVersion = that.oParentView .getController().getOwnerComponent().getManifestEntry("/sap.app/applicationVersion/version");
-						model.setProperty("/applicationVersion", applicationVersion);
-						oAboutDialog.setModel(model, "informationList");
-					}
-				};
-				ServerService.getInstance().getInformationList(getInformationListCallback);
-
-			
 			}
 			oAboutDialog.open();
 		}

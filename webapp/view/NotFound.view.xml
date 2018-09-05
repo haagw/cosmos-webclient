@@ -1,0 +1,12 @@
+<mvc:View
+   controllerName="com.oce.cosmos.controller.NotFound"
+   xmlns="sap.m"
+   xmlns:mvc="sap.ui.core.mvc">
+   <MessagePage
+      title="{i18n>notFound}"
+      text="{i18n>notFound.text}"
+      description="{i18n>notFound.description}"
+      showNavButton="true"
+	  navButtonPress="onNavBack"
+      />
+</mvc:View>

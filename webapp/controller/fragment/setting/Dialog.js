@@ -5,13 +5,13 @@
 sap.ui.define([
 	"sap/ui/base/ManagedObject",
 	"sap/ui/model/json/JSONModel",
-	"com/canon/cosmos/webclient/formatter/i18nTranslater",
-	"com/canon/cosmos/webclient/util/GlobalConstants"
+	"com/oce/cosmos/formatter/i18nTranslater",
+	"com/oce/cosmos/util/GlobalConstants"
 ], function(ManagedObject, JSONModel, i18nTranslater, GlobalConstants) {
 
 	var that;
 
-	return ManagedObject.extend("com.canon.cosmos.webclient.controller.fragment.setting.Dialog", {
+	return ManagedObject.extend("com.oce.cosmos.controller.fragment.setting.Dialog", {
 
 		/** 
 		 * Constructor
@@ -75,7 +75,7 @@ sap.ui.define([
 						var refControls = oSettingsDialog.getModel("settingModel").getProperty(oContext.getPath() + "/refControls");
 						controls = oSettingsDialog.getModel("settingModel").getProperty("/" + refControls);
 						oSettingsDialog.setModel(that._prepareFragmentModel(controls));
-						detailfragment = sap.ui.xmlfragment(that.oParentView.getId(), "com.canon.cosmos.webclient.view.fragment.setting." + node, oFragmentController);
+						detailfragment = sap.ui.xmlfragment(that.oParentView.getId(), "com.oce.cosmos.view.fragment.setting." + node, oFragmentController);
 						that.oParentView.byId("detailContainer").addContent(detailfragment);
 						
 					},
@@ -87,7 +87,7 @@ sap.ui.define([
 					 */
 					onBtnDefault: function(oEvent){
 						$.each(controls, function(index, value){
-							if(value.id.startsWith("sel") || value.id.startsWith("chk")){
+							if(value.id.startsWith("sel") || value.id.startsWith("chk") || value.id.startsWith("sti")){
 								oSettingsDialog.getModel().setProperty("/" + value.id + "CurrentValue", value.defaultValue);
 							}
 						});
@@ -115,7 +115,7 @@ sap.ui.define([
 					}
 				};
 				// create dialog via fragment factory
-				oSettingsDialog = sap.ui.xmlfragment(that.oParentView.getId(), "com.canon.cosmos.webclient.view.fragment.setting.Dialog", oFragmentController);
+				oSettingsDialog = sap.ui.xmlfragment(that.oParentView.getId(), "com.oce.cosmos.view.fragment.setting.Dialog", oFragmentController);
 				// connect dialog to the root view of this component (models, lifecycle)
 				that.oParentView.addDependent(oSettingsDialog);
 				// forward compact/cozy style into dialog
@@ -130,7 +130,7 @@ sap.ui.define([
 					var refControls = oSettingsDialog.getModel("settingModel").getProperty("/masterTree/0/refControls");
 					controls = oSettingsDialog.getModel("settingModel").getProperty("/" + refControls);
 					oSettingsDialog.setModel(that._prepareFragmentModel(controls));
-					detailfragment = sap.ui.xmlfragment(that.oParentView.getId(), "com.canon.cosmos.webclient.view.fragment.setting.DetailGlobal",oFragmentController);
+					detailfragment = sap.ui.xmlfragment(that.oParentView.getId(), "com.oce.cosmos.view.fragment.setting.DetailGlobal",oFragmentController);
 					that.oParentView.byId("detailContainer").addContent(detailfragment);
 					oSettingsDialog.open();
 				});
@@ -148,9 +148,9 @@ sap.ui.define([
 			var fragmentModel = new JSONModel();
 			var settingsStorage = new JSONModel(that.storage.get(GlobalConstants.STORAGE_SETTINGS));
 			$.each(controls, function(index, value){
-				if(value.id.startsWith("sel") || value.id.startsWith("chk")){
+				if(value.id.startsWith("sel") || value.id.startsWith("chk") || value.id.startsWith("sti")){
 					var key = settingsStorage.getProperty("/" + value.id);
-					if(key === null){
+					if(key === null || key === undefined){
 						fragmentModel.setProperty("/" + value.id + "CurrentValue", value.defaultValue);
 					}else{
 						fragmentModel.setProperty("/" + value.id + "CurrentValue", key);

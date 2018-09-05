@@ -5,15 +5,24 @@
 sap.ui.define([
 	"sap/ui/base/Object",
 	"sap/ui/model/json/JSONModel",
-	"com/canon/cosmos/webclient/util/GlobalConstants",
-	"com/canon/cosmos/webclient/util/GlobalProperties",
+	"com/oce/cosmos/util/GlobalConstants",
+	"com/oce/cosmos/util/GlobalProperties",
 	"sap/m/Dialog",
 	"sap/m/Label",
 	"sap/m/Input",
 	"sap/m/Button",
 	"sap/m/MessageStrip",
-	"com/canon/cosmos/webclient/formatter/i18nTranslater",
-], function (Object,JSONModel, GlobalConstants, GlobalProperties, Dialog, Label, Input, Button, MessageStrip, i18nTranslater){
+	"com/oce/cosmos/formatter/i18nTranslater",
+], function (Object,
+			JSONModel, 
+			GlobalConstants, 
+			GlobalProperties, 
+			Dialog, 
+			Label, 
+			Input, 
+			Button, 
+			MessageStrip, 
+			i18nTranslater){
 	"use strict";
 	var instance;
 	var storage;
@@ -22,9 +31,9 @@ sap.ui.define([
 	 * @class Manages the OAuth2 communication. 
 	 * @author Wolfgang Haag
 	 * @public
-	 * @name com.canon.cosmos.webclient.service.OAuthService
+	 * @name com.oce.cosmos.service.OAuthService
 	 */
-	var Service = Object.extend("com.canon.cosmos.webclient.service.OAuthService", {
+	var Service = Object.extend("com.oce.cosmos.service.OAuthService", {
 
 		/** 
 		 * Constructor Initialize the storage
@@ -66,7 +75,7 @@ sap.ui.define([
 				}
 				
 			});
-			oBearer.loadData(uri, parameters, true, "POST", false, false, null); 
+			oBearer.loadData(uri, parameters, true, "POST", false, "", null); 
 			
 		},
 
@@ -94,7 +103,7 @@ sap.ui.define([
 							getUserInformationCallback.onSuccess(oEventSub);
 						}
 					});
-					oUserInfoModel.loadData(uri, parameters, true, "GET", false, false, null); 
+					oUserInfoModel.loadData(uri, parameters, true, "GET", false, "", null); 
 					
 				},
 				onError: function(oError){
@@ -236,7 +245,7 @@ sap.ui.define([
 		},
 
 		/** 
-		 * Gets the extended bearer model from local storage
+		 * Gets the  bearer oDate from local storage
 		 * @public
 		 * @returns {object} The bearer data
 		 */
@@ -257,6 +266,17 @@ sap.ui.define([
 			}
 		},
 		
+		/** 
+		 * Gets the JSON Model from local storage
+		 * @public
+		 * @returns {sap.ui.model.json.JSONModel} The bearer model
+		 */
+		getBearerModelFromLocalStorage: function (){
+			var oBearer = instance.getBearerFromLocalStorage();
+			var oBearerModel = new JSONModel();
+			oBearerModel.setData(oBearer);
+			return oBearerModel;
+		},
 		
 		/** 
 		 * Get the user information from store

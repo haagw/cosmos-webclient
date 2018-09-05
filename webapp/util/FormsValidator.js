@@ -12,9 +12,9 @@ sap.ui.define([
 	 * @class Forms validator, validates some controls by it´s constraint settings
 	 * @author Wolfgang Haag
 	 * @public
-	 * @name com.canon.cosmos.webclient.utils.FormsValidator
+	 * @name com.oce.cosmos.utils.FormsValidator
 	 */
-	return Object.extend("com.canon.cosmos.webclient.util.FormsValidator",{
+	return Object.extend("com.oce.cosmos.util.FormsValidator",{
 		
 		/** 
 		 * The constructor

@@ -3,38 +3,42 @@
  *  Internet : http://www.canon.com
  */
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
+	"com/oce/cosmos/controller/BaseController",
 	"sap/ui/model/json/JSONModel",
-	"com/canon/cosmos/webclient/formatter/i18nTranslater",
-	"com/canon/cosmos/webclient/service/OAuthService",
-	"com/canon/cosmos/webclient/controller/fragment/AuthDialog"
-], function(Controller, JSONModel, i18nTranslater, OAuthService, AuthDialog) {
+	"com/oce/cosmos/formatter/i18nTranslater",
+	"com/oce/cosmos/service/OAuthService",
+	"com/oce/cosmos/controller/fragment/AuthDialog",
+	"com/oce/cosmos/service/ServerService",
+	"com/oce/cosmos/util/InternalNotificationHandler"
+], function(BaseController, JSONModel, i18nTranslater, OAuthService, AuthDialog, ServerService, InternalNotificationHandler) {
 	"use strict";
 	
 	//Reference to the controller
-	var appController;
+	var that;
 	/**
 	 * @class The main entry class for the cosmos eb client
 	 * @author Wolfgang Haag
 	 * @public
-	 * @name com.canon.cosmos.webclient.Controller.App
+	 * @name com.oce.cosmos.Controller.App
 	 */
 
-	return Controller.extend("com.canon.cosmos.webclient.controller.App", {
+	return BaseController.extend("com.oce.cosmos.controller.App", {
 		/**
-		 * @memberOf com.canon.cosmos.webclient.Controller.App
+		 * @memberOf com.oce.cosmos.Controller.App
 		 */
 		i18nTranslater: i18nTranslater,
 
 		onInit: function() {
-			appController = this;
+			that = this;
 			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
 
+			this.attachPopoverOnMouseover(this.byId("tbTitle"), this.byId("tbTitlePopover"));
+
 			//Set the popover template for the userinfo
-			this._oPopover = sap.ui.xmlfragment("com.canon.cosmos.webclient.view.LogoutPopover", this);
+			this._oPopover = sap.ui.xmlfragment("com.oce.cosmos.view.LogoutPopover", this);
 			this.getView().addDependent(this._oPopover);
 			
-			var btnAuth = appController.byId("btnAuth");
+			var btnAuth = that.byId("btnAuth");
 			//btnAuth.setText(i18nTranslater.doTranslate("login"));
 			
 			//Handle the srorage values
@@ -50,10 +54,27 @@ sap.ui.define([
 				this.setUserInformation(oBearerData);
 			}
 
+			
 		},
 
 		onAfterRendering: function() {
 			this._setToggleButtonTooltip(!sap.ui.Device.system.desktop);
+			
+			//Callback from service
+			var getInformationListCallback = {
+				onSuccess: function(oEvenSuccess) {
+					var model = oEvenSuccess.getSource();
+					model.setProperty("/currentYear", new Date().getFullYear());
+					var applicationVersion = that.getOwnerComponent().getManifestEntry("/sap.app/applicationVersion/version");
+					model.setProperty("/applicationVersion", applicationVersion);
+					var nodeName = model.getProperty("/nodeName");
+					if(nodeName.length === 0){
+						model.setProperty("/nodeName", i18nTranslater.doTranslate("notSet"));
+					}
+					that.setModel(model, "informationList");
+				}
+			};
+			ServerService.getInstance().getInformationList(getInformationListCallback);
 		},
 
 		/**
@@ -62,9 +83,18 @@ sap.ui.define([
 		 * @public
 		 */
 		onItemSelect: function(oEvent) {
-			var item = oEvent.getParameter('item');
-			var viewId = this.getView().getId();
-			sap.ui.getCore().byId(viewId + "--pageContainer").to(viewId + "--" + item.getKey());
+			var oItem = oEvent.getParameter("item");
+			var sKey = oItem.getKey();
+			this.getRouter().navTo(sKey, "flip");
+			
+/*			// if you click on home, settings or statistics button, call the navTo function
+			if ((sKey === "home" || sKey === "licenseOverview" || sKey === "statistics")) {
+				this.getRouter().navTo(sKey);
+			} else {
+				sap.m.MessageToast.show(sKey);
+			}*/
+	
+			
 		},
 
 		/**
@@ -77,7 +107,7 @@ sap.ui.define([
 				this._authDialog = new AuthDialog(this.getView());
 				var authDialogCallback = {
 					onAuthDone: function(oModelBearer) {
-						appController.setUserInformation(oModelBearer);
+						that.setUserInformation(oModelBearer);
 					}
 
 				};
@@ -96,7 +126,7 @@ sap.ui.define([
 		onLogoutPressed: function(oEvent) {
 			this._oPopover.close();
 			OAuthService.getInstance().removeBearerFromLocalStorage();
-			var btnAuth = appController.byId("btnAuth");
+			var btnAuth = that.byId("btnAuth");
 			btnAuth.setIcon("");
 			btnAuth.setText(i18nTranslater.doTranslate("login"));
 			this.handleLogout();
@@ -104,23 +134,44 @@ sap.ui.define([
 		},
 
 		handleLogout: function() {
-			var sideContentModel = appController.getView().getModel("side");
+			
+			var sideContentModel = that.getView().getModel("side");
 			sideContentModel.setProperty("/navigation/1/visible", false);
 			sideContentModel.setProperty("/navigation/2/visible", false);
 			sideContentModel.setProperty("/navigation/3/visible", false);
+			sideContentModel.setProperty("/navigation/4/visible", false);
+			sideContentModel.setProperty("/navigation/5/visible", false);
+			sideContentModel.setProperty("/navigation/6/visible", false);
+			sideContentModel.setProperty("/navigation/7/visible", false);
+			sideContentModel.setProperty("/navigation/8/visible", false);
+			sideContentModel.setProperty("/navigation/9/visible", false);
+			sideContentModel.setProperty("/navigation/10/visible", false);
+			sideContentModel.setProperty("/navigation/11/visible", false);
+			sideContentModel.setProperty("/navigation/12/visible", false);
 			
-			sap.m.MessageToast.show("Handle Logout", {});
+			sideContentModel.setProperty("/fixedNavigation/0/visible", false);
+			
+			this.getRouter().navTo("home");
+
 		},
 		handleLogin: function() {
-			//appController.getView().byId("jobManager").setVisible(true);
-			
-			var sideContentModel = appController.getView().getModel("side");
-			
-			
+
+			var sideContentModel = that.getView().getModel("side");
 			sideContentModel.setProperty("/navigation/1/visible", true);
 			sideContentModel.setProperty("/navigation/2/visible", true);
 			sideContentModel.setProperty("/navigation/3/visible", true);
-			sap.m.MessageToast.show("Handle Login", {});
+			sideContentModel.setProperty("/navigation/4/visible", true);
+			sideContentModel.setProperty("/navigation/5/visible", true);
+			sideContentModel.setProperty("/navigation/6/visible", true);
+			sideContentModel.setProperty("/navigation/7/visible", true);
+			sideContentModel.setProperty("/navigation/8/visible", true);
+			sideContentModel.setProperty("/navigation/9/visible", true);
+			sideContentModel.setProperty("/navigation/10/visible", true);
+			sideContentModel.setProperty("/navigation/11/visible", true);
+			sideContentModel.setProperty("/navigation/12/visible", true);
+			
+			sideContentModel.setProperty("/fixedNavigation/0/visible", true);
+
 		},
 
 		/** 
@@ -132,7 +183,7 @@ sap.ui.define([
 			oBearerModel.setData(oBearerData);
 
 			var getUserInformationCallback = {
-				sender: appController.getView(),
+				sender: that.getView(),
 				onError: function(oEventError) {
 					$.sap.log.debug("Username can not be set");
 				},
@@ -150,49 +201,35 @@ sap.ui.define([
 		},
 
 		onMenuHelpAction: function(oEvent) {
-			
-			
-			
+
 			var oItem = oEvent.getParameter("item"),
-				sItemPath = "";
+			sItemPath = "";
 			if (oItem instanceof sap.m.MenuItem) {
 				sItemPath = oItem.getId();
 				if(sItemPath.includes("mnuHelpAbout")){
-					$.sap.require("com.canon.cosmos.webclient.controller.fragment.AboutDialog");
-					var aboutDialog = new com.canon.cosmos.webclient.controller.fragment.AboutDialog(this.getView());
+					$.sap.require("com.oce.cosmos.controller.fragment.AboutDialog");
+					var aboutDialog = new com.oce.cosmos.controller.fragment.AboutDialog(this.getView());
 					aboutDialog.open();
 				}else if(sItemPath.includes("mnuHelpSettings")){
-					$.sap.require("com.canon.cosmos.webclient.controller.fragment.setting.Dialog");
-					var settingsDialog = new com.canon.cosmos.webclient.controller.fragment.setting.Dialog(this.getView());
+					$.sap.require("com.oce.cosmos.controller.fragment.setting.Dialog");
+					var settingsDialog = new com.oce.cosmos.controller.fragment.setting.Dialog(this.getView());
 					settingsDialog.open();
 				}
 			}
 
 
 		},
-		
-		doTest: function(){
-			var checkBearerCallback = {
-				sender : this.getView(),
-				onSuccess: function(oEvent){
-					$.sap.log.debug("*** LOAD BEARER:");
-				},
-				onError: function(){
-					$.sap.log.debug("*** LOAD BEARER: ");
+		onMenuRunAction: function(oEvent){
+			var oItem = oEvent.getParameter("item"),
+			sItemPath = "";
+			if (oItem instanceof sap.m.MenuItem) {
+				sItemPath = oItem.getId();
+				if(sItemPath.endsWith("mnuRunTest")){
+					InternalNotificationHandler.notifyInformation("Dies ist eine Information", "Nur zu Demozwecke", "<p>Dies sind die Informationsdetails</p>");
+				}else if(sItemPath.endsWith("mnuRunTest1")){
+					InternalNotificationHandler.notifyWarning("Dies ist eine Warnung", "Nur zu Demozwecke", "<p>Dies sind die Warnungsdetails</p>");
 				}
-			};
-			
-			var oBearerModel = new JSONModel({
-			    "access_token": "869b554b-67de-498a-9003-d5c10915be64",
-			    "token_type": "bearer",
-			    "refresh_token": "74d6cb41-82bb-46dc-97a8-f35968478e191",
-			    "expires_in": 299,
-			    "scope": "private public",
-			    "access_token_valid" : false
-			});
-			
-			
-			OAuthService.getInstance().checkBearer(oBearerModel, checkBearerCallback);
+			}
 		},
 
 		/**
@@ -215,14 +252,77 @@ sap.ui.define([
 		 * @private
 		 */
 		_setToggleButtonTooltip: function(bLarge) {
-			var toggleButton = this.byId('sideNavigationToggleButton');
+			var toggleButton = this.byId("sideNavigationToggleButton");
 			if (bLarge) {
 				toggleButton.setTooltip(this.i18nTranslater.doTranslate("largeSizeNavigation"));
 			} else {
 				toggleButton.setTooltip(this.i18nTranslater.doTranslate("smallSizeNavigation"));
 			}
-		}
+		},
+		
+		/**
+		 * Method to set the tooltip
+		 * @param {object} targetControl - the target control bind to
+		 * @param {object} popover - the depend popover inside the target control
+		 * @private
+		 */
+	    attachPopoverOnMouseover: function (targetControl, popover) {
+	      targetControl.addEventDelegate({
+	        onmouseover: this._showPopover.bind(this, targetControl, popover),
+	        onmouseout: this._clearPopover.bind(this, popover)
+	      }, this);
+	    },
+    
+		 _showPopover: function (targetControl, popover) {
+	      this._timeId = window.setTimeout(() => popover.openBy(targetControl), 500);
+	    },
 
+	    _clearPopover: function(popover) {
+	      clearTimeout(this._timeId);
+	      popover.close();
+	    },
+	    // Errors Pressed
+		onInternalNotification: function (oEvent) {
+			
+			if (!this.byId("internalNotificationPopover")) {
+				var oMessagePopover = new sap.m.MessagePopover(this.getView().createId("internalNotificationPopover"), {
+					headerButton : new sap.m.Button({
+						text : i18nTranslater.doTranslate("clear"), 
+						press: ()=>{
+							oMessagePopover.destroyItems();
+							oMessagePopover.destroy();
+							InternalNotificationHandler.clearNotifications();
+							
+						}
+					}),
+					placement: sap.m.VerticalPlacementType.Bottom,
+					items: {
+						path: "notification>/internalNotifications",
+						factory: this._createError
+					},
+					afterClose: function () {
+						oMessagePopover.destroy();
+					}
+
+				});
+				this.getView().addDependent(oMessagePopover);
+				// forward compact/cozy style into dialog
+				jQuery.sap.syncStyleClass(this.getView().getController().getOwnerComponent().getContentDensityClass(), this.getView(), oMessagePopover);
+				oMessagePopover.openBy(oEvent.getSource());
+			}
+		},
+		_createError: function (sId, oBindingContext) {
+				var oBindingObject = oBindingContext.getObject();
+				var oMessageItem = new sap.m.MessageItem(sId, {
+					type: oBindingObject.type,
+					title: oBindingObject.title,
+					subtitle: oBindingObject.subTitle,
+					description: oBindingObject.detail + "<p><strong>" + new Date().toLocaleTimeString() + "</strong></p>",
+					counter: oBindingObject.counter,
+					markupDescription: true
+				});
+				return oMessageItem;
+			}
 	});
 
 });

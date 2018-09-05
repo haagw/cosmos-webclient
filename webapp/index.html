@@ -28,35 +28,25 @@
 			src="/resources/sap-ui-core.js"
 			data-sap-ui-theme="sap_belize"
 			data-sap-ui-xx-bindingSyntax="complex"
-			data-sap-ui-preload="synch"
-			data-sap-ui-xx-waitForTheme="true"
 			data-sap-ui-compatVersion="edge"
 			data-sap-ui-logLevel="DEBUG"
 			data-sap-ui-debug="false"
-			data-sap-ui-resourceroots='{
-				"com.canon.cosmos.webclient": "./"
-				
-			}'>
+			data-sap-ui-resourceroots='{"com.oce.cosmos": "./"}'
+			data-sap-ui-preload="async" >
 		</script>
-		<script src="lib/FakeRest.min.js"></script>
 
 		<!-- Application launch configuration -->
 		<script>
-			sap.ui.getCore().attachInit(function () {
+			sap.ui.getCore().attachInit(function() {
 				sap.ui.require([
-					"sap/m/Page",
 					"sap/ui/core/ComponentContainer"
-				], function (Page, ComponentContainer) {
-					// initialize the UI component
-					new Page({
-						showHeader: false,
-						content: new ComponentContainer({
-							height : "100%",
-							name : "com.canon.cosmos.webclient",
-							settings: {
-								id : "webclient"
-							}
-						})
+				], function(ComponentContainer) {
+					new ComponentContainer({
+						name : "com.oce.cosmos",
+						height : "100%",
+						settings : {
+							id : "webclient"
+						}
 					}).placeAt("content");
 				});
 			});

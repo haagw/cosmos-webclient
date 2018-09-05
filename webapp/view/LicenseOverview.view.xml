@@ -1,0 +1,72 @@
+<mvc:View controllerName="com.oce.cosmos.controller.LicenseOverview" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	height="100%">
+	<Page showHeader="false"  class="sapUiContentPadding" enableScrolling="true">
+		<content>
+			<Table id="tblLicenceInformation" inset="false" 
+			headerText="License Overview"
+			items="{ 
+				path: '/', 
+				sorter: {
+					path: 'groupName',
+					descending: false
+				}
+
+			}">
+				<infoToolbar>
+					<Toolbar active="ture">
+						<Select change="onChange"  id="selFilter"
+ 							items="{path: '/Filter'}">
+						   <core:Item text="{groupName}" />
+						</Select>
+						<Button	text="Filter" press="onSearch" icon="sap-icon://filter"/>
+						<Button	text="Reset" press="onReset" />
+					</Toolbar>
+				</infoToolbar>
+				<columns>
+					<Column mergeDuplicates="true" width="150px"  >
+						<Text text="Group name"/>
+					</Column>
+					<Column width="250px" >
+						<Text text="Commercial name"/>
+					</Column>
+					<Column >
+						<Text text="License Number"/>
+					</Column>
+					<Column >
+						<Text text="Type"/>
+					</Column>
+					<Column >
+						<Text text="Issuer"/>
+					</Column>
+					<Column >
+						<Text text="Authorized"/>
+					</Column>
+					<Column >
+						<Text text="Expires"/>
+					</Column>
+					<Column >
+						<Text text="Message"/>
+					</Column>
+					<Column >
+						<Text text="Usage"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{groupName}"/>
+							<Text text="{commercialName}"/>
+							<Text text="{licenseNumber}"/>
+							<Text text="{type}"/>
+							<Text text="{issuer}"/>
+							<Text text="{authorized}"/>
+							<Text text="{expires}"/>
+							<Text text="{error}"/>
+							<Text text="{usage}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Page>
+</mvc:View>

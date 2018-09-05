@@ -1,17 +1,13 @@
 {
 	"_version": "1.5.0",
 	"sap.app": {
-		"id": "com.canon.cosmos.webclient",
+		"id": "com.oce.cosmos",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"title": "{{appTitle}}",
 		"description": "{{appDescription}}",
 		"applicationVersion": {
 			"version": "1.0.0-SNAPSHOT"
-		},
-		"sourceTemplate": {
-			"id": "ui5template.basicSAPUI5ApplicationProject",
-			"version": "1.54.6"
 		},
 		"dataSources": {
 			"cosmosWebApi": {
@@ -27,11 +23,11 @@
 		"technology": "UI5",
 		"icons": {
 			"icon": "sap-icon://cloud",
-			"favIcon": "",
-			"phone": "",
-			"phone@2": "",
-			"tablet": "",
-			"tablet@2": ""
+			"favIcon": "favicon.ico",
+			"phone": "cosmos-webclient/webapp/image/apple-icon-57x57.png",
+			"phone@2": "cosmos-webclient/webapp/image/apple-icon-114x114.png",
+			"tablet": "cosmos-webclient/webapp/image/apple-icon-72x72.png",
+			"tablet@2": "cosmos-webclient/webapp/image/apple-icon-144x144.png"
 		},
 		"deviceTypes": {
 			"desktop": true,
@@ -42,19 +38,29 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "com.canon.cosmos.webclient.view.App",
-			"type": "XML"
+			"viewName": "com.oce.cosmos.view.App",
+			"type": "XML",
+			"async": true,
+			"id": "app"
 		},
 		"dependencies": {
 			"minUI5Version": "1.5.0",
 			"libs": {
-				"sap.m": {},
+				"sap.m": {
+					"minVersion": ""
+				},
 				"sap.tnt": {
 					"minVersion": ""
 				},
-				"sap.ui.core": {},
-				"sap.ui.layout": {},
-				"sap.uxap": {}
+				"sap.ui.core": {
+					"minVersion": ""
+				},
+				"sap.ui.table": {
+					"minVersion": ""
+				},
+				"sap.ui.ux3": {
+					"minVersion": ""
+				}
 			}
 		},
 		"contentDensities": {
@@ -65,12 +71,25 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "com.canon.cosmos.webclient.i18n.i18n"
+					"bundleName": "com.oce.cosmos.i18n.i18n"
+				}
+			},
+			"message": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "com.oce.cosmos.i18n.messagebundle"
 				}
 			},
 			"side": {
 				"type": "sap.ui.model.json.JSONModel",
-				"uri": "model/sideContent.json"
+				"uri": "model/sideContent.json",
+				"preload": false
+			},
+			"notification": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"uri": "model/notificationModel.json",
+				"preload": false
 			}
 		},
 		"resources": {
@@ -78,8 +97,54 @@
 				"uri": "css/style.css"
 			}]
 		},
-		"config": {
-			"lon": 2
+		"config": {},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"controlId": "mainContents",
+				"controlAggregation": "pages",
+				"viewPath": "com.oce.cosmos.view",
+				"async": true,
+				"bypassed": {
+					"target": ["notFound"]
+				}
+			},
+			"routes": [{
+				"name": "home",
+				"pattern": "",
+				"target": ["home"],
+				"titleTarget": "home",
+				"greedy": false
+			}, {
+				"name": "licenseOverview",
+				"pattern": "licenseOverview",
+				"target": ["licenseOverview"],
+				"titleTarget": "LicenseOverview",
+				"greedy": false
+			}],
+			"targets": {
+				"home": {
+					"viewId": "home",
+					"viewName": "Home",
+					"viewType": "XML",
+					"transition": "slide",
+					"clearAggregation": true
+				},
+				"licenseOverview": {
+					"viewName": "LicenseOverview",
+					"viewId": "licenseOverview",
+					"viewType": "XML",
+					"transition": "slide",
+					"clearAggregation": true
+				},
+				"notFound": {
+					"viewName": "NotFound",
+					"viewId": "notFound",
+					"viewType": "XML",
+					"transition": "show",
+					"clearAggregation": true
+				}
+			}
 		}
 	}
 }

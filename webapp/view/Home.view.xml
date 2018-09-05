@@ -1,0 +1,61 @@
+<mvc:View
+	controllerName="com.oce.cosmos.controller.Home"
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc">
+	<Page showHeader="false">
+		<l:BlockLayout
+			id="BlockLayout"
+			background="Default">
+			<l:BlockLayoutRow>
+				<l:BlockLayoutCell class="sapUiNoContentPadding">
+				</l:BlockLayoutCell>
+			</l:BlockLayoutRow>
+			<l:BlockLayoutRow>
+				<l:BlockLayoutCell
+					class="sapUiResponsiveContentPadding"
+					title="Welcome to Oce-COSMOS"
+					backgroundColorSet="ColorSet9"
+					backgroundColorShade="ShadeA"
+					titleAlignment="Left"/>
+			</l:BlockLayoutRow>
+			<l:BlockLayoutRow>
+				<l:BlockLayoutCell
+					backgroundColorSet="ColorSet11"
+					backgroundColorShade="ShadeD">
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell
+					backgroundColorSet="ColorSet11"
+					backgroundColorShade="ShadeB">
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell
+					backgroundColorSet="ColorSet11"
+					backgroundColorShade="ShadeD">
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell
+					backgroundColorSet="ColorSet11"
+					backgroundColorShade="ShadeB">
+				</l:BlockLayoutCell>
+			</l:BlockLayoutRow>
+			<l:BlockLayoutRow>
+				<l:BlockLayoutCell
+					backgroundColorSet="ColorSet11"
+					backgroundColorShade="ShadeB">
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell
+					backgroundColorSet="ColorSet11"
+					backgroundColorShade="ShadeD">
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell
+					backgroundColorSet="ColorSet11"
+					backgroundColorShade="ShadeB">
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell
+					backgroundColorSet="ColorSet11"
+					backgroundColorShade="ShadeD">
+				</l:BlockLayoutCell>
+			</l:BlockLayoutRow>
+		</l:BlockLayout>
+	</Page>
+</mvc:View>

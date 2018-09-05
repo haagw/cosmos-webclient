@@ -2,18 +2,18 @@
 	<f:SimpleForm editable="true"
 			layout="ResponsiveGridLayout"
 			title="{i18n>settingsAppearance}"
-			labelSpanXL="3"
-			labelSpanL="3"
-			labelSpanM="3"
-			labelSpanS="3"
+			labelSpanXL="4"
+			labelSpanL="4"
+			labelSpanM="4"
+			labelSpanS="4"
 			adjustLabelSpan="false"
 			emptySpanXL="1"
 			emptySpanL="1"
 			emptySpanM="1"
 			emptySpanS="1"
-			columnsXL="8"
-			columnsL="8"
-			columnsM="8"
+			columnsXL="7"
+			columnsL="7"
+			columnsM="7"
 			singleContainerFullSize="false" 
 			class="sapUiTinyMargin" >
 			<f:content>
@@ -26,6 +26,8 @@
 						
 					</items>
 				</Select>
+				<Label text="{i18n>settingsAppearanceNotification}" />
+				<StepInput id="stiDetailAppearanceNotifications" min="20" max="50" textAlign="Center"  value="{/stiDetailAppearanceNotificationsCurrentValue}" />
 			</f:content>
 		</f:SimpleForm>
 </core:FragmentDefinition>

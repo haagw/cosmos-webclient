@@ -12,11 +12,12 @@ sap.ui.define([
 	 * @class Holds global properties set at runtime
 	 * @author Wolfgang Haag
 	 * @public
-	 * @name com.canon.cosmos.webclient.utils.GlobalProperties
+	 * @name com.oce.cosmos.utils.GlobalProperties
 	 */
 	return {
 		
 		_oDataSource : new JSONModel(),
+		_maxCountOfNotifications : 20,
 		
 		/** 
 		 * Gets the cosmos web api datasource defined in the manifest
@@ -34,6 +35,13 @@ sap.ui.define([
 		 */
 		setWebApiDataSource: function(oDataSource){
 			this._oDataSource.setData(oDataSource);
+		},
+		
+		getMaxCountOfNotifications: function(){
+			return this._maxCountOfNotifications;
+		},
+		setMaxCountOfNotifications : function(maxCount){
+			this._maxCountOfNotifications = maxCount;
 		}
 		
 		

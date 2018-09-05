@@ -12,7 +12,7 @@ sap.ui.define([
 	 * @class Holds all constants used by the app
 	 * @author Wolfgang Haag
 	 * @public
-	 * @name com.canon.cosmos.webclient.utils.Constants
+	 * @name com.oce.cosmos.utils.Constants
 	 */
 	return{
 		
