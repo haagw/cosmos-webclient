@@ -12,7 +12,7 @@ sap.ui.define([
 
 		/** 
 		 * Creates the device  model
-		 * @returns the device model
+		 * @returns {sap.m.JSONModel} - the device model
 		 */
 		createDeviceModel: function() {
 			var oModel = new JSONModel(Device);

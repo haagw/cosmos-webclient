@@ -1,0 +1,12 @@
+{
+  "name": "cosmos-webclient",
+  "version": "1.0.0",
+  "description": "The COSMOS web client",
+  "private": true,
+  "devDependencies": {
+    "grunt-openui5" : "0.14.0",
+    "grunt-contrib-uglify": "3.3.0",
+    "eslint" : "5.5.0",
+    "grunt" : "1.0.3"
+  }
+}

@@ -9,12 +9,14 @@ sap.ui.define([
 	"com/oce/cosmos/service/OAuthService",
 	"com/oce/cosmos/controller/fragment/AuthDialog",
 	"com/oce/cosmos/service/ServerService",
-	"com/oce/cosmos/util/InternalNotificationHandler"
-], function(BaseController, JSONModel, i18nTranslater, OAuthService, AuthDialog, ServerService, InternalNotificationHandler) {
+	"com/oce/cosmos/util/InternalNotificationHandler",
+	"com/oce/cosmos/controller/fragment/AboutDialog",
+	"com/oce/cosmos/controller/fragment/setting/SettingDialog"
+], function(BaseController, JSONModel, i18nTranslater, OAuthService, AuthDialog, ServerService, InternalNotificationHandler, AboutDialog, SettingDialog) {
 	"use strict";
 	
 	//Reference to the controller
-	var that;
+	var that = this;
 	/**
 	 * @class The main entry class for the cosmos eb client
 	 * @author Wolfgang Haag
@@ -123,7 +125,7 @@ sap.ui.define([
 		 * @param {sap.ui.base.Event} oEvent ?
 		 * @public
 		 */
-		onLogoutPressed: function(oEvent) {
+		onLogoutPressed: function() {
 			this._oPopover.close();
 			OAuthService.getInstance().removeBearerFromLocalStorage();
 			var btnAuth = that.byId("btnAuth");
@@ -184,9 +186,6 @@ sap.ui.define([
 
 			var getUserInformationCallback = {
 				sender: that.getView(),
-				onError: function(oEventError) {
-					$.sap.log.debug("Username can not be set");
-				},
 				onSuccess: function(oEvenSuccess) {
 					oEvenSuccess.sender.setModel(oEvenSuccess.getSource(), "userdata");
 					var btnAuth = oEvenSuccess.sender.getController().byId("btnAuth");
@@ -195,9 +194,7 @@ sap.ui.define([
 					oEvenSuccess.sender.getController().handleLogin();
 				}
 			};
-
 			OAuthService.getInstance().getUserInformation(oBearerModel, getUserInformationCallback);
-
 		},
 
 		onMenuHelpAction: function(oEvent) {
@@ -208,11 +205,11 @@ sap.ui.define([
 				sItemPath = oItem.getId();
 				if(sItemPath.includes("mnuHelpAbout")){
 					$.sap.require("com.oce.cosmos.controller.fragment.AboutDialog");
-					var aboutDialog = new com.oce.cosmos.controller.fragment.AboutDialog(this.getView());
+					var aboutDialog = new AboutDialog(this.getView());
 					aboutDialog.open();
 				}else if(sItemPath.includes("mnuHelpSettings")){
-					$.sap.require("com.oce.cosmos.controller.fragment.setting.Dialog");
-					var settingsDialog = new com.oce.cosmos.controller.fragment.setting.Dialog(this.getView());
+					$.sap.require("com.oce.cosmos.controller.fragment.setting.SettingDialog");
+					var settingsDialog = new SettingDialog(this.getView());
 					settingsDialog.open();
 				}
 			}
@@ -274,8 +271,11 @@ sap.ui.define([
 	    },
     
 		 _showPopover: function (targetControl, popover) {
-	      this._timeId = window.setTimeout(() => popover.openBy(targetControl), 500);
-	    },
+	      this._timeId = window.setTimeout( function() {
+	      		popover.openBy(targetControl);
+	    	}, 500);
+		 	
+		 },
 
 	    _clearPopover: function(popover) {
 	      clearTimeout(this._timeId);
@@ -288,7 +288,7 @@ sap.ui.define([
 				var oMessagePopover = new sap.m.MessagePopover(this.getView().createId("internalNotificationPopover"), {
 					headerButton : new sap.m.Button({
 						text : i18nTranslater.doTranslate("clear"), 
-						press: ()=>{
+						press: function (){
 							oMessagePopover.destroyItems();
 							oMessagePopover.destroy();
 							InternalNotificationHandler.clearNotifications();

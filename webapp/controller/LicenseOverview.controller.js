@@ -8,7 +8,7 @@ sap.ui.define([
 		"use strict";
 		
 		//Reference to the controller
-		var that;
+		var that = this;
 		
 		return BaseController.extend("com.oce.cosmos.controller.LicenseOverview", {
 

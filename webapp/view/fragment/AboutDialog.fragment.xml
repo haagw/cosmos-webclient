@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
-	<Dialog id="aboutDialog" title="{i18n>mnuHelpAbout}" contentHeight="400px" contentWidth="350px" >
+	<Dialog id="aboutDialog" title="{i18n>mnuHelpAbout}" contentHeight="450px" contentWidth="350px" >
 		<content>
 			<HBox justifyContent="Center" >
 				<Image src="image/cosmos_logo-transpa.png" width="150px" alt="COSMOS Logo" class="sapUiTinyMarginTop"/>

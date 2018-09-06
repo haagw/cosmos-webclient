@@ -8,21 +8,17 @@ sap.ui.define([
 	"com/oce/cosmos/util/GlobalConstants",
 	"com/oce/cosmos/util/GlobalProperties",
 	"sap/m/Dialog",
-	"sap/m/Label",
-	"sap/m/Input",
-	"sap/m/Button",
 	"sap/m/MessageStrip",
 	"com/oce/cosmos/formatter/i18nTranslater",
+	"com/oce/cosmos/util/InternalNotificationHandler"
 ], function (Object,
 			JSONModel, 
 			GlobalConstants, 
 			GlobalProperties, 
 			Dialog, 
-			Label, 
-			Input, 
-			Button, 
 			MessageStrip, 
-			i18nTranslater){
+			i18nTranslater,
+			InternalNotificationHandler){
 	"use strict";
 	var instance;
 	var storage;
@@ -68,10 +64,10 @@ sap.ui.define([
 			oBearer.attachRequestCompleted(function (oEvent){
 				
 				oEvent.sender = getBearerCallback.sender;
-				if(oEvent.getParameters().success === false){
-					getBearerCallback.onError(oEvent);
-				}else{
+				if(oEvent.getParameters().success === true){
 					getBearerCallback.onSuccess(oEvent);
+				}else{
+					getBearerCallback.onError(oEvent);
 				}
 				
 			});
@@ -96,11 +92,11 @@ sap.ui.define([
 					var oUserInfoModel = new JSONModel();
 					oUserInfoModel.attachRequestCompleted(function (oEventSub){
 						oEventSub.sender = getUserInformationCallback.sender;
-						if(oEventSub.getParameters().success === false){
-							getUserInformationCallback.onError(oEventSub);
-						}else{
+						if(oEventSub.getParameters().success === true){
 							storage.put(GlobalConstants.STORAGE_USERINFO,oEventSub.getSource().getData());
 							getUserInformationCallback.onSuccess(oEventSub);
+						}else{
+							InternalNotificationHandler.notifyAPIException(oEventSub);
 						}
 					});
 					oUserInfoModel.loadData(uri, parameters, true, "GET", false, "", null); 
@@ -126,7 +122,7 @@ sap.ui.define([
 		 */
 		checkBearer: function(oBearerModel, checkBearerCallback){
 
-			if(oBearerModel.getProperty("/access_token_valid") === false){
+			if(oBearerModel.getProperty("/accessTokenValid") === false){
 				var getNewBearerCallback = {
 					onSuccess: function(newBearerModel){
 						
@@ -148,14 +144,14 @@ sap.ui.define([
 										showIcon : true,
 										showCloseButton : true 
 									}),
-									new Label({ text: i18nTranslater.doTranslate("password"), labelFor: "txtPassword" }),
-									new Input("txtPassword", {
+									new sap.m.Label({ text: i18nTranslater.doTranslate("password"), labelFor: "txtPassword" }),
+									new sap.m.Input("txtPassword", {
 										width: "100%",
 										type: "Password"
 									})
 	
 								],
-								beginButton: new Button({
+								beginButton: new sap.m.Button({
 									text: i18nTranslater.doTranslate("confirm"),
 									press: function (event) {
 										//Get the new Bearer
@@ -184,7 +180,7 @@ sap.ui.define([
 									}
 									
 								}),
-								endButton: new Button({
+								endButton: new sap.m.Button({
 									text: i18nTranslater.doTranslate("cancel"),
 									press: function () {
 										//Logout the user
@@ -228,16 +224,16 @@ sap.ui.define([
 			var oBearer = new JSONModel();
 			oBearer.attachRequestCompleted(function (oEvent){
 				
-				if(oEvent.getParameters().success === false){
+				if(oEvent.getParameters().success === true){
+					//Callback with the newBearerModel
+					getNewBearerCallback.onSuccess(oEvent.getSource());
+				}else{
 					//Callback with the errorobject
 					//message : "error"
 					//responseTeext : "{...}"
 					//statusCode : 400
 					//StatusText : "BadRequest"
 					getNewBearerCallback.onError(oEvent.getParameters().errorobject);
-				}else{
-					//Callback with the newBearerModel
-					getNewBearerCallback.onSuccess(oEvent.getSource());
 				}
 			});
 			oBearer.loadData(uri, parameters, true, "POST", false, false, null); 
@@ -255,10 +251,10 @@ sap.ui.define([
 			if (oBearerData === null) {
 				return null;
 			} else {
-				if (new Date().getTime() > oBearerData.expire_date) {
-					oBearerData.access_token_valid = false;
+				if (new Date().getTime() > oBearerData.expireDate) {
+					oBearerData.accessTokenValid = false;
 				} else {
-					oBearerData.access_token_valid = true;
+					oBearerData.accessTokenValid = true;
 				}
 				$.sap.log.debug("*** LOAD BEARER: " + JSON.stringify(oBearerData));
 				return oBearerData;
@@ -296,7 +292,7 @@ sap.ui.define([
 		  	var oCurrentDate = new Date();
 		  	var time = oCurrentDate.getTime() + ((oBearerData.expires_in - 5) * 1000);
 		  	oCurrentDate = oCurrentDate.setTime(time);
-		  	oBearerData.expire_date = oCurrentDate;
+		  	oBearerData.expireDate = oCurrentDate;
 		  	$.sap.log.debug("*** STORE BEARER: " + JSON.stringify(oBearerData));
 		  	storage.put(GlobalConstants.STORAGE_BEARER, oBearerData);
 		},
@@ -306,7 +302,7 @@ sap.ui.define([
 		 * @public
 		 */
 		removeBearerFromLocalStorage: function(){
-			$.sap.log.debug("*** REMOVE BEARER");
+			$.sap.log.debug("*** REMOVE BEARER from local store");
 			storage.remove(GlobalConstants.STORAGE_BEARER);
 			storage.remove(GlobalConstants.STORAGE_USERINFO);
 		}

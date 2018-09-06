@@ -7,7 +7,7 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel"
 ], function(ManagedObject, JSONModel){
 	
-	var that;
+	var that = this;
 	
 	return ManagedObject.extend("com.oce.cosmos.controller.fragment.AboutDialog", {
 		

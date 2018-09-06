@@ -54,7 +54,6 @@ sap.ui.define([
 		
 		/** 
 		 * Gets license information about the server
-		 * @param {object} oBearerModel a valid bearer 
 		 * @param {function()} getLicenseInformationListCallback - the callback function
 		 */
 		getLicenseInformationList : function (getLicenseInformationListCallback) {

@@ -9,9 +9,9 @@ sap.ui.define([
 	"com/oce/cosmos/util/GlobalConstants"
 ], function(ManagedObject, JSONModel, i18nTranslater, GlobalConstants) {
 
-	var that;
+	var that = this;
 
-	return ManagedObject.extend("com.oce.cosmos.controller.fragment.setting.Dialog", {
+	return ManagedObject.extend("com.oce.cosmos.controller.fragment.setting.SettingDialog", {
 
 		/** 
 		 * Constructor
@@ -115,7 +115,7 @@ sap.ui.define([
 					}
 				};
 				// create dialog via fragment factory
-				oSettingsDialog = sap.ui.xmlfragment(that.oParentView.getId(), "com.oce.cosmos.view.fragment.setting.Dialog", oFragmentController);
+				oSettingsDialog = sap.ui.xmlfragment(that.oParentView.getId(), "com.oce.cosmos.view.fragment.setting.SettingDialog", oFragmentController);
 				// connect dialog to the root view of this component (models, lifecycle)
 				that.oParentView.addDependent(oSettingsDialog);
 				// forward compact/cozy style into dialog

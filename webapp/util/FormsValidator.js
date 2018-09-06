@@ -5,8 +5,8 @@
 sap.ui.define([
 	"sap/ui/base/Object",
 	"sap/ui/core/message/Message",
-    "sap/ui/core/MessageType"
-], function (Object, Message, MessageType){
+	"sap/ui/core/MessageType"
+], function(Object, Message, MessageType) {
 	"use strict";
 	/**
 	 * @class Forms validator, validates some controls by it´s constraint settings
@@ -14,108 +14,116 @@ sap.ui.define([
 	 * @public
 	 * @name com.oce.cosmos.utils.FormsValidator
 	 */
-	return Object.extend("com.oce.cosmos.util.FormsValidator",{
-		
+	return Object.extend("com.oce.cosmos.util.FormsValidator", {
+
 		/** 
 		 * The constructor
 		 * @public
 		 */
-		constructor: function(){
+		constructor: function() {
 			this._isValid = true;
-        	this._isValidationPerformed = false;
+			this._isValidationPerformed = false;
 		},
 		/** 
 		 * Checks the validation
 		 * @public
 		 * @returns {boolean} true if it is valid 
 		 */
-		isValid: function(){
-			 return this._isValidationPerformed && this._isValid;
+		isValid: function() {
+			return this._isValidationPerformed && this._isValid;
 		},
-		
+
 		/** 
 		 * Validates the given control by its constraints settings
 		 * @param {object} oControl - The control to check the validation
 		 * @public
-		 * @returns void
+		 * @returns {Boolean} - the result true or false
 		 */
-		validate: function(oControl){
+		validate: function(oControl) {
 			this._isValid = true;
-	        sap.ui.getCore().getMessageManager().removeAllMessages();
-	        this._validate(oControl);
-	        return this.isValid();
+			sap.ui.getCore().getMessageManager().removeAllMessages();
+			this._validate(oControl);
+			return this.isValid();
 		},
-		_validate: function(oControl){
+		_validate: function(oControl) {
 			var aPossibleAggregations = ["items", "content", "form", "formContainers", "formElements", "fields"],
-            aControlAggregation   = null,
-            oControlBinding       = null,
-            aValidateProperties   = ["value", "selectedKey", "text"], // yes, I want to validate Select and Text controls too
-            isValidatedControl    = false,
-            oExternalValue, oInternalValue,
-            i, j;
+				aControlAggregation = null,
+				oControlBinding = null,
+				aValidateProperties = ["value", "selectedKey", "text"], // yes, I want to validate Select and Text controls too
+				isValidatedControl = false,
+				oExternalValue, oInternalValue,
+				i, j;
 
-        // only validate controls and elements which have a 'visible' property
-        if (oControl instanceof sap.ui.core.Control ||
-            oControl instanceof sap.ui.layout.form.FormContainer ||
-            oControl instanceof sap.ui.layout.form.FormElement) {
+			// only validate controls and elements which have a 'visible' property
+			if (oControl instanceof sap.ui.core.Control ||
+				oControl instanceof sap.ui.layout.form.FormContainer ||
+				oControl instanceof sap.ui.layout.form.FormElement) {
 
-            // only check visible controls (invisible controls make no sense checking)
-            if (oControl.getVisible()) {
+				// only check visible controls (invisible controls make no sense checking)
+				if (!oControl.getVisible()) {
+					this._isValidationPerformed = true;
+					return;
+				}
 
-                // check control for any properties worth validating 
-                for (i = 0; i < aValidateProperties.length; i += 1) {
-                    if (oControl.getBinding(aValidateProperties[i])) {
-                        // check if a data type exists (which may have validation constraints)
-                        if (oControl.getBinding(aValidateProperties[i]).getType()) {
-                            // try validating the bound value
-                            try {
-                                oControlBinding = oControl.getBinding(aValidateProperties[i]);
-                                oExternalValue  = oControl.getProperty(aValidateProperties[i]);
-                                oInternalValue  = oControlBinding.getType().parseValue(oExternalValue, oControlBinding.sInternalType);
-                                oControlBinding.getType().validateValue(oInternalValue);
-                            }
-                            // catch any validation errors
-                            catch (ex) {
-                                this._isValid = false;
-                                oControlBinding = oControl.getBinding(aValidateProperties[i]);
-                                sap.ui.getCore().getMessageManager().addMessages(
-                                    new Message({
-                                        message  : ex.message,
-                                        type     : MessageType.Error,
-                                        target   : ( oControlBinding.getContext() ? oControlBinding.getContext().getPath() + "/" : "") +
-                                                oControlBinding.getPath(),
-                                        processor: oControl.getBinding(aValidateProperties[i]).getModel()
-                                    })
-                                );
-                            }
+				// check control for any properties worth validating 
+				for (i = 0; i < aValidateProperties.length; i += 1) {
+					if (oControl.getBinding(aValidateProperties[i]) && oControl.getBinding(aValidateProperties[i]).getType()) {
 
-                            isValidatedControl = true;
-                        }
-                    }
-                }
+						// try validating the bound value
+						try {
+							oControlBinding = oControl.getBinding(aValidateProperties[i]);
+							oExternalValue = oControl.getProperty(aValidateProperties[i]);
+							oInternalValue = oControlBinding.getType().parseValue(oExternalValue, oControlBinding.sInternalType);
+							oControlBinding.getType().validateValue(oInternalValue);
+						}
+						// catch any validation errors
+						catch (ex) {
+							this._isValid = false;
+							oControlBinding = oControl.getBinding(aValidateProperties[i]);
+							sap.ui.getCore().getMessageManager().addMessages(
+								new Message({
+									message: ex.message,
+									type: MessageType.Error,
+									target: (oControlBinding.getContext() ? oControlBinding.getContext().getPath() + "/" : "") +
+										oControlBinding.getPath(),
+									processor: oControl.getBinding(aValidateProperties[i]).getModel()
+								})
+							);
+						}
 
-                // if the control could not be validated, it may have aggregations
-                if (!isValidatedControl) {
-                    for (i = 0; i < aPossibleAggregations.length; i += 1) {
-                        aControlAggregation = oControl.getAggregation(aPossibleAggregations[i]);
+						isValidatedControl = true;
+					}
 
-                        if (aControlAggregation) {
-                            // generally, aggregations are of type Array
-                            if (aControlAggregation instanceof Array) {
-                                for (j = 0; j < aControlAggregation.length; j += 1) {
-                                    this._validate(aControlAggregation[j]);
-                                }
-                            }
-                            // ...however, with sap.ui.layout.form.Form, it is a single object *sigh*
-                            else {
-                                this._validate(aControlAggregation);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        this._isValidationPerformed = true;
+				}
+
+				if (isValidatedControl) {
+					this._isValidationPerformed = true;
+					return;
+				}
+
+				// if the control could not be validated, it may have aggregations
+				for (i = 0; i < aPossibleAggregations.length; i += 1) {
+					aControlAggregation = oControl.getAggregation(aPossibleAggregations[i]);
+					if (!aControlAggregation) {
+						continue;
+					}
+
+					// generally, aggregations are of type Array
+					if (aControlAggregation instanceof Array) {
+						for (j = 0; j < aControlAggregation.length; j += 1) {
+							this._validate(aControlAggregation[j]);
+						}
+					}
+					// ...however, with sap.ui.layout.form.Form, it is a single object *sigh*
+					else {
+						this._validate(aControlAggregation);
+					}
+
+				}
+
+			}
+
+			this._isValidationPerformed = true;
 		}
 	});
 });

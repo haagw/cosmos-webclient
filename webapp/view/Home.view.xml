@@ -57,5 +57,13 @@
 				</l:BlockLayoutCell>
 			</l:BlockLayoutRow>
 		</l:BlockLayout>
+		<TileContent class="sapUiSmallMargin">
+			<content>
+				<NewsContent
+					contentText="This is the first implementation of the COSMOS Web-Client. Still, development status!"
+					subheader="September 06, 2018" >
+				</NewsContent>
+			</content>
+		</TileContent>
 	</Page>
 </mvc:View>
