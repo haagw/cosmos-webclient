@@ -90,9 +90,13 @@
 		},
 		"config": {
 			"cosmosWebApi" : {
-				"uri" : "/cosmos-webapi",
-				"version" : "v3"
-			} 
+				"uri" : "http://localhost:8088/cosmos-webapi",
+				"path" : "v3"
+			},
+			"cosmosWebAuth" : {
+				"uri" : "http://localhost:8088/cosmos-webauth",
+				"path" : "oauth"
+			}
 		},
 		"routing": {
 			"config": {

@@ -35,7 +35,7 @@ sap.ui.define([
 		 */
 		getInformationList: function(getInformationListCallback) {
 			
-			var uri = GlobalProperties.getWebApiDataSource().getProperty("/uri") + "cosmos-webapi/v3/server/list/informations";
+			var uri = GlobalProperties.getWebApiUri() + "/server/list/informations";
 
 			var oInformation = new JSONModel();
 			oInformation.attachRequestCompleted(function (oEvent){
@@ -65,7 +65,7 @@ sap.ui.define([
 					    "authorization" : "Bearer " + oSubBearerModel.getProperty("/access_token") 
 					};
 					
-					var uri = GlobalProperties.getWebApiDataSource().getProperty("/uri") + "cosmos-webapi/v3/server/list/licenseInformations";
+					var uri = GlobalProperties.GlobalProperties.getWebApiUri() + "/server/list/licenseInformations";
 					var oLicenseInformation = new JSONModel();
 					oLicenseInformation.attachRequestCompleted(function (oEvent){
 						oEvent.sender = getLicenseInformationListCallback.sender;

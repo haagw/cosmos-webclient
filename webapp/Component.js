@@ -27,8 +27,13 @@ sap.ui.define([
 			if(cosmosWebApi.uri.startsWith("/cosmos-webapi")){
 				cosmosWebApi.uri = window.location.origin + cosmosWebApi.uri ;
 			}
+			GlobalProperties.setWebApiUri(cosmosWebApi.uri + "/" + cosmosWebApi.path + "/");
 			
-			GlobalProperties.setWebApiDataSource(cosmosWebApi.uri + "/" + cosmosWebApi.version + "/");
+			var cosmosWebAuth = this.getManifestEntry("/sap.ui5/config/cosmosWebAuth");
+			if(cosmosWebAuth.uri.startsWith("/cosmos-webauth")){
+				cosmosWebAuth.uri = window.location.origin + cosmosWebAuth.uri ;
+			}
+			GlobalProperties.setWebAuthUri(cosmosWebAuth.uri + "/" + cosmosWebAuth.path + "/");
 			
 			// call the base component's init function
 			UIComponent.prototype.init.apply(this, arguments);

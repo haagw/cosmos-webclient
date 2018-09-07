@@ -3,9 +3,8 @@
  *  Internet : http://www.canon.com
  */
 sap.ui.define([
-	"sap/ui/model/json/JSONModel"
 	
-], function (JSONModel){
+], function (){
 	"use strict";
 	
 	/**
@@ -16,25 +15,44 @@ sap.ui.define([
 	 */
 	return {
 		
-		_oDataSource : new JSONModel(),
+		_webApiUri : "",
+		_webAuthUri : "",
 		_maxCountOfNotifications : 20,
 		
 		/** 
-		 * Gets the cosmos web api datasource defined in the manifest
-		 * @returns {sap.ui.model.JSONModel} The datasource model
+		 * Gets the cosmos web api uri
+		 * @returns {String} the webapi uri
 		 * @public
 		 */
-		getWebApiDataSource: function(){
-			return this._oDataSource;
+		getWebApiUri: function(){
+			return this._webApiUri;
 		},
 		
 		/** 
-		 * Sets the data source defined in the manifest
-		 * @param {object} oDataSource object
+		 * Sets the webapi uri 
+		 * @param {String} uri - the webapi uri
 		 * @public
 		 */
-		setWebApiDataSource: function(oDataSource){
-			this._oDataSource.setData(oDataSource);
+		setWebApiUri: function(uri){
+			this._webApiUri = uri;
+		},
+		
+		/** 
+		 * Gets the cosmos web auth uri
+		 * @returns {String} the web auth uri
+		 * @public
+		 */
+		getWebAuthUri: function(){
+			return this._webAuthUri;
+		},
+		
+		/** 
+		 * Sets the web auth uri 
+		 * @param {String} uri - the webauth uri
+		 * @public
+		 */
+		setWebAuthUri: function(uri){
+			this._webAuthUri = uri;
 		},
 		
 		getMaxCountOfNotifications: function(){
