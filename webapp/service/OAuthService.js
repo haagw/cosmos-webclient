@@ -53,7 +53,7 @@ sap.ui.define([
 		 */
 		getBearer: function(username, password, getBearerCallback) {
 			
-			var uri = GlobalProperties.getWebAuthUri() + "/token";
+			var uri = GlobalProperties.getWebAuthUri() + "token";
 			var parameters = "grant_type=" + GlobalConstants.GRANT_TYPE.PASSWORD +
 			"&username=" + username +
 			"&password=" + password +
@@ -87,7 +87,7 @@ sap.ui.define([
 				sender: getUserInformationCallback.sender,
 				onSuccess: function(oSubBearerModel){
 					
-					var uri = GlobalProperties.GlobalProperties.getWebAuthUri() + "/check_token";
+					var uri = GlobalProperties.getWebAuthUri() + "check_token";
 					var parameters = "token="  + oSubBearerModel.getProperty("/access_token");
 					var oUserInfoModel = new JSONModel();
 					oUserInfoModel.attachRequestCompleted(function (oEventSub){
@@ -215,7 +215,7 @@ sap.ui.define([
 		 */
 		_getNewBearer: function(oBearerModel, getNewBearerCallback) {
 			
-			var uri = GlobalProperties.GlobalProperties.getWebAuthUri() + "/token";
+			var uri = GlobalProperties.GlobalProperties.getWebAuthUri() + "token";
 			var parameters = "grant_type=" + GlobalConstants.GRANT_TYPE.REFRESH_TOKEN +
 			"&client_id=" + GlobalConstants.CLIENT_ID +
 			"&client_secret=" + GlobalConstants.CLIENT_SECRET +
