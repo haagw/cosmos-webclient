@@ -3,10 +3,31 @@
   "version": "1.0.0",
   "description": "The COSMOS web client",
   "private": true,
+  "scripts": {
+    "test": "grunt lint && grunt test",
+    "start": "grunt serve",
+    "build": "grunt"
+  },
   "devDependencies": {
-    "grunt-openui5" : "0.14.0",
+    "@types/openui5": "^1.40.2",
+    "bower": "^1.8.0",
+    "grunt-cli": "1.3.0",
+    "grunt": "^1.0.3",
     "grunt-contrib-uglify": "3.3.0",
-    "eslint" : "5.5.0",
-    "grunt" : "1.0.3"
+    "grunt-contrib-clean": "1.0.0",
+    "grunt-regex-replace": "0.4.0",
+    "grunt-contrib-connect": "^1.0.0",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-openui5": "^0.14.0",
+    "grunt-eslint": "^21.0.0",
+    "grunt-karma": "^1.0.0",
+    "karma": "^1.5.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-openui5": "~0.2.2",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-qunit": "^1.2.1",
+    "karma-sinon": "^1.0.5",
+    "qunitjs": "^2.0.0"
   }
 }
