@@ -65,7 +65,7 @@ sap.ui.define([
 					    "authorization" : "Bearer " + oSubBearerModel.getProperty("/access_token") 
 					};
 					
-					var uri = GlobalProperties.GlobalProperties.getWebApiUri() + "/server/list/licenseInformations";
+					var uri = GlobalProperties.getWebApiUri() + "/server/list/licenseInformations";
 					var oLicenseInformation = new JSONModel();
 					oLicenseInformation.attachRequestCompleted(function (oEvent){
 						oEvent.sender = getLicenseInformationListCallback.sender;
