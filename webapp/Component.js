@@ -28,7 +28,7 @@ sap.ui.define([
 				cosmosWebApi.uri = window.location.origin;
 			}
 			
-			GlobalProperties.setWebApiDataSource(cosmosWebApi.uri + "/" + cosmosWebApi.version + "/");
+			GlobalProperties.setWebApiDataSource("/" + cosmosWebApi.uri + "/" + cosmosWebApi.version + "/");
 			
 			// call the base component's init function
 			UIComponent.prototype.init.apply(this, arguments);
