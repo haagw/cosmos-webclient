@@ -8,15 +8,6 @@
 		"description": "{{appDescription}}",
 		"applicationVersion": {
 			"version": "1.0.0-SNAPSHOT"
-		},
-		"dataSources": {
-			"cosmosWebApi": {
-				"uri": "http://localhost:8088/",
-				"type": "JSON",
-				"settings": {
-					"localUri": "/"
-				}
-			}
 		}
 	},
 	"sap.ui": {
@@ -97,7 +88,12 @@
 				"uri": "css/style.css"
 			}]
 		},
-		"config": {},
+		"config": {
+			"cosmosWebApi" : {
+				"uri" : "/cosmos-webapi",
+				"version" : "v3"
+			} 
+		},
 		"routing": {
 			"config": {
 				"routerClass": "sap.m.routing.Router",
