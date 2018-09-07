@@ -25,10 +25,10 @@ sap.ui.define([
 			
 			var cosmosWebApi = this.getManifestEntry("/sap.ui5/config/cosmosWebApi");
 			if(cosmosWebApi.uri.startsWith("/cosmos-webapi")){
-				cosmosWebApi.uri = window.location.origin;
+				cosmosWebApi.uri = window.location.origin + cosmosWebApi.uri ;
 			}
 			
-			GlobalProperties.setWebApiDataSource("/" + cosmosWebApi.uri + "/" + cosmosWebApi.version + "/");
+			GlobalProperties.setWebApiDataSource(cosmosWebApi.uri + "/" + cosmosWebApi.version + "/");
 			
 			// call the base component's init function
 			UIComponent.prototype.init.apply(this, arguments);
