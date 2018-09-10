@@ -5,8 +5,8 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		
 		dir: {
-			webapp: 'webapp',
-			dist: 'target/webapp'
+			webapp: "webapp",
+			dist: "target/webapp"
 		},
 		
 		connect: {
@@ -161,7 +161,7 @@ module.exports = function(grunt) {
 						}
 					}
 				},
-				reporters: ["progress", "coverage"],
+				reporters: ["progress", "coverage"]
 			},
 			watch: {
 				client: {
@@ -190,7 +190,7 @@ module.exports = function(grunt) {
 						}
 					]
 				},
-				reporters: ["progress", "coverage"],
+				reporters: ["progress", "coverage"]
 			}
 		},
 
@@ -201,11 +201,11 @@ module.exports = function(grunt) {
 						cwd: "<%= dir.webapp %>",
 						prefix: "com/oce/cosmos",
 						src: [
-							'**/*.js',
-							'**/*.fragment.xml',
-							'**/*.view.xml',
-							'**/*.properties',
-							'!test/**'
+							"**/*.js",
+							"**/*.fragment.xml",
+							"**/*.view.xml",
+							"**/*.properties",
+							"!test/**"
 						]
 					},
 					dest: "<%= dir.dist %>"
