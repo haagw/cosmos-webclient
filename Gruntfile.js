@@ -91,7 +91,7 @@ module.exports = function(grunt) {
 					{	
 						expand : true,
 						cwd: "<%= dir.webapp %>/",
-						src: ["**/*.json", "**/*.html", "*.ico", "**/*.css", "image/**", "!test/**"], 
+						src: ["**/*.json", "**/*.html", "*.ico", "**/*.css", "image/**", "i18n/**", "!test/**"], 
 						dest: "<%= dir.dist %>"
 					},
 										{	
@@ -204,7 +204,7 @@ module.exports = function(grunt) {
 							"**/*.js",
 							"**/*.fragment.xml",
 							"**/*.view.xml",
-							"**/*.properties",
+							//"**/*.properties",
 							"!test/**"
 						]
 					},
