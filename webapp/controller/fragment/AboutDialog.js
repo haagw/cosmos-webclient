@@ -3,9 +3,8 @@
  *  Internet : http://www.canon.com
  */
 sap.ui.define([
-	"sap/ui/base/ManagedObject",
-	"sap/ui/model/json/JSONModel"
-], function(ManagedObject, JSONModel){
+	"sap/ui/base/ManagedObject"
+], function(ManagedObject){
 	
 	var that = this;
 	

@@ -13,7 +13,7 @@ sap.ui.define([
 			sText = sText.replace("{1}", param2);
 		}
 		if (sText.includes("{2}")) {
-			sText = sText.replace("{2}", param2);
+			sText = sText.replace("{2}", param3);
 		}
 		return sText;
 	};

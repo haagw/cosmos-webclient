@@ -85,7 +85,7 @@ sap.ui.define([
 					 * Button default pressed
 					 * @param {sap.ui.base.Event} oEvent The event
 					 */
-					onBtnDefault: function(oEvent){
+					onBtnDefault: function(){
 						$.each(controls, function(index, value){
 							if(value.id.startsWith("sel") || value.id.startsWith("chk") || value.id.startsWith("sti")){
 								oSettingsDialog.getModel().setProperty("/" + value.id + "CurrentValue", value.defaultValue);
@@ -98,7 +98,7 @@ sap.ui.define([
 					 * Button apply pressed
 					 * @param {sap.ui.base.Event} oEvent The event
 					 */
-					onButtonApply: function(oEvent){
+					onButtonApply: function(){
 						$.each(controls, function(index, value){
 							if(value.id.startsWith("sel") || value.id.startsWith("chk")){
 								var key = oSettingsDialog.getModel().getProperty("/" + value.id + "CurrentValue");
@@ -126,7 +126,7 @@ sap.ui.define([
 				oSettingsDialog.setModel(oModel, "settingModel");
 				
 				//Used while asynchronus call
-				oModel.attachRequestCompleted(function (oEvent){
+				oModel.attachRequestCompleted(function (){
 					var refControls = oSettingsDialog.getModel("settingModel").getProperty("/masterTree/0/refControls");
 					controls = oSettingsDialog.getModel("settingModel").getProperty("/" + refControls);
 					oSettingsDialog.setModel(that._prepareFragmentModel(controls));

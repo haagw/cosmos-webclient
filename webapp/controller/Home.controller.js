@@ -3,9 +3,8 @@
  *  Internet : http://www.canon.com
  */
 sap.ui.define([
-		"com/oce/cosmos/controller/BaseController",
-		"sap/ui/model/json/JSONModel"
-	], function (BaseController, JSONModel) {
+		"com/oce/cosmos/controller/BaseController"
+	], function (BaseController) {
 		"use strict";
 		
 		return BaseController.extend("com.oce.cosmos.controller.Home", {

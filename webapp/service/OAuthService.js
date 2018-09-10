@@ -130,8 +130,7 @@ sap.ui.define([
 						checkBearerCallback.onSuccess(newBearerModel);
 						
 					},
-					onError: function(errorObject){
-						
+					onError: function(){
 						//Confirm dialog must popup
 						var dialog = new Dialog({
 							title: i18nTranslater.doTranslate("confirmLogin"),
@@ -153,7 +152,7 @@ sap.ui.define([
 								],
 								beginButton: new sap.m.Button({
 									text: i18nTranslater.doTranslate("confirm"),
-									press: function (event) {
+									press: function () {
 										//Get the new Bearer
 										var password = sap.ui.getCore().byId("txtPassword").getValue();
 										if(password.length === 0){
