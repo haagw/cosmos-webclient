@@ -1,20 +1,21 @@
 {
 	"navigation": [{
 		"key": "home",
+		"permission" : "",
 		"icon": "sap-icon://home",
 		"expanded" : false,
-		"visible" : true,
 		"items": []
 	},
 	{
 		"key": "jobManager",
+		"permission" : "PERM_PLUGIN_JOBS",
 		"icon": "sap-icon://customer-view",
 		"expanded" : false,
-		"visible" : false,
 		"items": []
 	},
 	{
 		"key": "parameterSet",
+		"permission" : "PERM_PLUGIN_PARAMETERSET",
 		"icon": "sap-icon://key-user-settings",
 		"expanded" : false,
 		"visible" : false,
@@ -22,6 +23,7 @@
 	},
 	{
 		"key": "workflowDesigner",
+		"permission" : "PERM_PLUGIN_WORKFLOWDESIGNER",
 		"icon": "sap-icon://dimension",
 		"expanded" : false,
 		"visible" : false,
@@ -29,114 +31,116 @@
 	},
 	{
 		"key": "logManager",
+		"permission" : "PERM_PLUGIN_SYSLOG|PERM_PLUGIN_USERLOG",
 		"icon": "sap-icon://list",
 		"expanded" : false,
-		"visible" : false,
 		"items": [{
 			"key": "logManager_System",
+			"permission": "PERM_PLUGIN_SYSLOG",
 			"expanded" : false,
 			"visible" : true
 		}, {
 			"key": "logManager_User",
+			"permission": "PERM_PLUGIN_USERLOG",
 			"expanded" : false,
 			"visible" : true
 		}]
 	},
 	{
 		"key": "dataExchange",
+		"permission" : "PERM_PLUGIN_PACKAGEMANAGER|PERM_PLUGIN_IMPORTMANAGER|PERM_PLUGIN_VERSIONING",
 		"icon": "sap-icon://home-share",
 		"expanded" : false,
-		"visible" : false,
 		"items": [{
 			"key": "dataExchange_DeploymentOut",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_PACKAGEMANAGER",
+			"expanded" : false
 		}, 
 		{
 			"key": "dataExchange_DeploymentIn",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_IMPORTMANAGER",
+			"expanded" : false
 		}, 
 		{
 			"key": "dataExchange_Versioning",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_VERSIONING",
+			"expanded" : false
 		}]
 	},
 	{
 		"key": "inputChannelManager",
+		"permission" : "PERM_PLUGIN_INPUTCHANNEL",
 		"icon": "sap-icon://inbox",
 		"expanded" : false,
-		"visible" : false,
 		"items": [{
 			"key": "inputChannelManager_Hotfolder",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_INPUTCHANNEL",
+			"expanded" : false
 		}, {
 			"key": "inputChannelManager_Http",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_INPUTCHANNEL",
+			"expanded" : false
 		}]
 	},
 	{
 		"key": "adapterManager",
+		"permission" : "PERM_PLUGIN_ADAPTER",
 		"icon": "sap-icon://repost",
 		"expanded" : false,
-		"visible" : false,
 		"items": [{
 			"key": "adapterManager_Therefore",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_ADAPTER",
+			"expanded" : false
 		}, {
 			"key": "adapterManager_PrismaPro",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_ADAPTER",
+			"expanded" : false
 		}]
 	},
 	{
 		"key": "reportManager",
+		"permission" : "PERM_PLUGIN_REPORTVIEWER",
 		"icon": "sap-icon://newspaper",
 		"expanded" : false,
-		"visible" : false,
 		"items": []
 	},
 	{
 		"key": "dataManager",
+		"permission" : "PERM_PLUGIN_BACKUPRESTORE",
 		"icon": "sap-icon://database",
 		"expanded" : false,
-		"visible" : false,
 		"items": [{
 			"key": "dataManager_Backup",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_BACKUPRESTORE",
+			"expanded" : false
 		}, {
 			"key": "dataManager_Restore",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_BACKUPRESTORE",
+			"expanded" : false
 		}]
 	}, {
 		"key": "userManager",
+		"permission" : "PERM_PLUGIN_USERMANAGEMENT",
 		"icon": "sap-icon://user-settings",
 		"expanded" : false,
-		"visible" : false,
 		"items": []
 	}, {
 		"key": "systemAdministration",
+		"permission" : "PERM_PLUGIN_CONFIG",
 		"icon": "sap-icon://settings",
 		"expanded" : false,
-		"visible" : false,
 		"items": [{
 			"key": "agent",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_CONFIG",
+			"expanded" : false
 		}, {
 			"key": "apiServer",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_CONFIG",
+			"expanded" : false
 		},{
 			"key": "licenseOverview",
-			"expanded" : false,
-			"visible" : true
+			"permission" : "PERM_PLUGIN_CONFIG",
+			"expanded" : false
 		}]
 	}
 	
@@ -145,8 +149,8 @@
 	
 	"fixedNavigation": [{
 		"key": "console",
-		"icon": "sap-icon://my-view",
-		"visible" : false
+		"permission" : "PERM_PLUGIN_CONSOLE",
+		"icon": "sap-icon://my-view"
 	}],
 	"headerItems": [{
 		"key": "tbTitlePopover"

@@ -1,0 +1,751 @@
+<mvc:View xmlns:commons="sap.ui.commons" xmlns:core="sap.ui.core"
+          xmlns:layout="sap.ui.commons.layout"
+          xmlns:l="sap.ui.layout"
+          xmlns="sap.m"
+          xmlns:table="sap.ui.table"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+          xmlns:mvc="sap.ui.core.mvc"
+          height="100%"
+          controllerName="com.oce.cosmos.controller.inputChannelManager.HotFolder">
+   <IconTabBar id="CSiD" showOverflowSelectList="true" >
+      <items>
+         <IconTabFilter text="Overview" id="OVERVIEW" closable="false"  stretchContentHeight="true" >
+            <content>
+            <ScrollContainer height="90%" width="100%" horizontal="true" vertical="true">
+               <Panel id="OVERVIEW-GeneralInformation" headerText="General Information" expandable="true" expanded="true" >
+                  <content>
+                     <layout:MatrixLayout xmlns:layout="sap.ui.commons.layout" columns="1"  >
+                        <layout:rows>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="1">
+                                    <layout:content>
+                                       <Text text="&#xA;&#x9;&#x9;&#x9;The HotFolder input channel scans directories for hot files.&#xA;&#x9;&#x9;&#x9;"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="1">
+                                    <layout:content>
+                                       <CheckBox xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                                 text="Activate the HotFolder channel on server startup"
+                                                 selected="{listItems>/SETTINGS/active/VALUE}"
+                                                 app:default="true"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                        </layout:rows>
+                     </layout:MatrixLayout>
+                  </content>
+               </Panel>
+               <Panel id="OVERVIEW-Status" headerText="Status" expandable="true" expanded="true">
+                  <content>
+                     <layout:MatrixLayout xmlns:layout="sap.ui.commons.layout" columns="1">
+                        <layout:rows>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="1">
+                                    <layout:content>
+                                       <Text text="&#xA;&#x9;&#x9;&#x9;The current status of the channel is listed below.&#xA;&#x9;&#x9;&#x9;"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="1">
+                                    <layout:content>
+                                       <core:Icon id="image-status" size="1rem" src="sap-icon://status-positive" class="sapUiTinyMarginEnd" />
+                                       <Label xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                              app:id="status"
+                                              app:type="status"
+                                              app:command=""
+                                              app:text="HotFolder"
+                                              app:args=""
+                                              id="status"
+                                              text="&#xA;&#x9;&#x9;&#x9;{parts: ['df'], formatter : '.statusCheck'}&#xA;&#x9;&#x9;"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                        </layout:rows>
+                     </layout:MatrixLayout>
+                  </content>
+               </Panel>
+               <Panel id="OVERVIEW-AvailableTasks" headerText="Available Tasks" expandable="true"
+                      expanded="true">
+                  <content>
+                     <layout:MatrixLayout xmlns:layout="sap.ui.commons.layout" columns="4">
+                        <layout:rows>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="4">
+                                    <layout:content>
+                                       <Text text="&#xA;&#x9;&#x9;&#x9;Use the links below to execute one of the defined tasks.&#xA;&#x9;&#x9;&#x9;"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="4">
+                                    <layout:content>
+                                       <core:Icon src="sap-icon://begin" size="1rem" class="sapUiTinyMarginEnd" />
+                                       <Link xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                             text="Start the input channel"
+                                             press=".formActionButtonPressed"
+                                             app:id="Start"
+                                             app:refid="status"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="4">
+                                    <layout:content>
+                                       <core:Icon src="sap-icon://stop" size="1rem" class="sapUiTinyMarginEnd" />
+                                       <Link xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                             text="Stop the input channel"
+                                             press=".formActionButtonPressed"
+                                             app:id="Stop"
+                                             app:refid="status"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="4">
+                                    <layout:content>
+                                       <core:Icon src="sap-icon://restart" size="1rem" class="sapUiTinyMarginEnd" />
+                                       <Link xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                             text="Restart the input channel and update its configuration"
+                                             press=".formActionButtonPressed"
+                                             app:id="Restart"
+                                             app:refid="status"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                        </layout:rows>
+                     </layout:MatrixLayout>
+                  </content>
+               </Panel>
+               <Panel id="OVERVIEW-QueueTasks" headerText="Queue Tasks" expandable="true"
+                      expanded="true">
+                  <content>
+                     <layout:MatrixLayout xmlns:layout="sap.ui.commons.layout" columns="1">
+                        <layout:rows>
+                           <layout:MatrixLayoutRow>
+                              <layout:cells>
+                                 <layout:MatrixLayoutCell colSpan="1">
+                                    <layout:content>
+                                       <core:Icon src="sap-icon://list" size="1rem" class="sapUiTinyMarginEnd" />
+                                       <Link xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                             text="Manage Queues"
+                                             press=".handleHTMLClick"
+                                             app:page-Instance="page://QUEUES"/>
+                                       <Label text=": open the Queue Page to manage Queues." wrapping="true"/>
+                                    </layout:content>
+                                 </layout:MatrixLayoutCell>
+                              </layout:cells>
+                           </layout:MatrixLayoutRow>
+                        </layout:rows>
+                     </layout:MatrixLayout>
+                  </content>
+               </Panel>
+               </ScrollContainer>
+            </content>
+         </IconTabFilter>
+         <IconTabFilter text="Queues" id="QUEUES" key="QUEUES" closable="false">
+            <content>
+               <l:Splitter xmlns:l="sap.ui.layout" orientation="Horizontal">
+                  <layout:MatrixLayout xmlns:layout="sap.ui.commons.layout">
+                     <layout:layoutData>
+                        <l:SplitterLayoutData size="30%"/>
+                     </layout:layoutData>
+                     <layout:rows>
+                        <layout:MatrixLayoutRow>
+                           <layout:cells>
+                              <layout:MatrixLayoutCell>
+                                 <layout:content>
+                                    <Panel id="QUEUES-Queues" headerText="Queues" expandable="true" expanded="true">
+                                       <content>
+                                          <layout:MatrixLayout columns="5">
+                                             <layout:rows>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="5">
+                                                         <layout:content>
+                                                            <Text text="&#xA;&#x9;&#x9;&#x9;&#x9;Select a queue from the table to edit the parameters or use one of the buttons to Manage the Queues.&#xA;&#x9;&#x9;&#x9;&#x9;"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                         	                                                               <HBox>
+                                                                  <Button xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                                                          app:parentTableId="-"
+                                                                          icon="sap-icon://add"
+                                                                          tooltip="Add"
+                                                                          press=".addListItem"
+                                                                          app:masterDetailID="QUEUES-Details"
+                                                                          app:refTableId="QUEUES-Table"
+                                                                          app:TableAddEntry="Queue"/>
+                                                                  <Button xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                                                          app:parentTableId="-"
+                                                                          icon="sap-icon://delete"
+                                                                          tooltip="Remove"
+                                                                          press=".removeListItem"
+                                                                          app:masterDetailID="QUEUES-Details"
+                                                                          app:refTableId="QUEUES-Table"/>
+                                                                  <Button xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                                                          icon="sap-icon://copy"
+                                                                          tooltip="Copy"
+                                                                          press=".copyListItem"
+                                                                          app:masterDetailID="QUEUES-Details"
+                                                                          app:refTableId="QUEUES-Table"
+                                                                          app:TableAddEntry="Queue"/>
+                                                               </HBox>
+                                                            <HBox>
+                                                               <ScrollContainer height="500.0px" vertical="true" class="selectListBorderStyle">
+                                                                  <content>
+                                                                     <List mode="SingleSelectMaster" growingScrollToLoad="true"
+                                                                           growingDirection="Downwards"
+                                                                           rememberSelections="true"
+                                                                           items="{listItems>/CHILDREN}"
+                                                                           selectionChange=".onListBoxItemSelected"
+                                                                           updateFinished=".onModelUpdate"
+                                                                           id="QUEUES-Table">
+                                                                        <StandardListItem type="Active" title="{listItems>VALUE}"/>
+                                                                     </List>
+                                                                  </content>
+                                                               </ScrollContainer>
+
+                                                            </HBox>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content/>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content/>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content/>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                             </layout:rows>
+                                          </layout:MatrixLayout>
+                                       </content>
+                                    </Panel>
+
+                                 </layout:content>
+                              </layout:MatrixLayoutCell>
+                           </layout:cells>
+                        </layout:MatrixLayoutRow>
+                     </layout:rows>
+                  </layout:MatrixLayout>
+                  <layout:MatrixLayout xmlns:layout="sap.ui.commons.layout">
+                     <layout:rows>
+                        <layout:MatrixLayoutRow>
+                           <layout:cells>
+                              <layout:MatrixLayoutCell>
+                                 <layout:content>
+                                    <Panel xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+                                           id="QUEUES-Details"
+                                           headerText="Details"
+                                           expandable="true"
+                                           expanded="true"
+                                           app:active="true--B"
+                                           app:datafilepattern="--S"
+                                           app:ticketfilepattern="--S"
+                                           app:scanpath="--S"
+                                           app:scantrigger="0/10 * * * * ?--c"
+                                           app:waittime="0--I"
+                                           app:acceptzerofiles="false--B"
+                                           app:isfilelist="false--B"
+                                           app:lock="false--B"
+                                           app:onfilenotfound="--W"
+                                           app:onvalidateticket="--W"
+                                           app:onfileaccepted="--W">
+                                       <content>
+                                          <layout:MatrixLayout columns="5">
+                                             <layout:rows>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="5">
+                                                         <layout:content>
+                                                            <Text text=""/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Name : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <Input id="qname" app:path="/" value="{listItems>VALUE}"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Active : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <CheckBox text="start this queue on server startup"
+                                                                      selected="{listItems>SETTINGS/active/VALUE}"
+                                                                      app:default="true"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Datafile pattern : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <Input app:path="/datafilepattern"
+                                                                   value="{listItems>SETTINGS/datafilepattern/VALUE}"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text=""/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <Label text="or use "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Ticketfile pattern : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <Input app:path="/ticketfilepattern"
+                                                                   value="{listItems>SETTINGS/ticketfilepattern/VALUE}"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Scan Path : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Button text="..." press=".directoryStructureRequested" app:scanPathField="scanpath"
+                                                                    width="100.0px"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="3">
+                                                         <layout:content>
+                                                            <Input id="scanpath" app:path="/scanpath"
+                                                                   value="{listItems>SETTINGS/scanpath/VALUE}"
+                                                                   app:name="Scan Path"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Scan Trigger : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Button text="..." press=".cronjobSelectionDialogButtonPressed"
+                                                                    app:cronTriggerField="trigger"
+                                                                    width="100.0px"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="3">
+                                                         <layout:content>
+                                                            <Input id="trigger" app:path="/scantrigger"
+                                                                   value="{listItems>SETTINGS/scantrigger/VALUE}"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Wait Time : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <Input app:path="/waittime" value="{listItems>SETTINGS/waittime/VALUE}"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Zero Files : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <CheckBox text="accept files with zero bytes file size"
+                                                                      selected="{listItems>SETTINGS/acceptzerofiles/VALUE}"
+                                                                      app:default="false"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Collect Files : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <CheckBox text="All found files will be added to the filestatus table."
+                                                                      selected="{listItems>SETTINGS/isfilelist/VALUE}"
+                                                                      app:default="false"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="1">
+                                                         <layout:content>
+                                                            <Label text="Lock Processing : "/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                      <layout:MatrixLayoutCell colSpan="4">
+                                                         <layout:content>
+                                                            <CheckBox text="Parallel access impossible due to lock. Useful on identical configuration on several cluster nodes."
+                                                                      selected="{listItems>SETTINGS/lock/VALUE}"
+                                                                      app:default="false"/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="5">
+                                                         <layout:content>
+                                                            <Label text=""/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="5">
+                                                         <layout:content>
+                                                            <Panel headerText="Workflows" expandable="true" expanded="true">
+                                                               <content>
+                                                                  <layout:MatrixLayout columns="5">
+                                                                     <layout:rows>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Text text="&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Workflows called by this Queue.&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <commons:HorizontalDivider xmlns:commons="sap.ui.commons"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Label text="Workflow if no file was found."/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="1">
+                                                                                 <layout:content>
+                                                                                    <Image src="images/wf.gif"/>
+                                                                                    <Link text="File not found" press=".workflowSelectionDialogButtonPressed"
+                                                                                          app:workflowLableID="QUEUES-onfilenotfound"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                              <layout:MatrixLayoutCell colSpan="4">
+                                                                                 <layout:content>
+                                                                                    <Label id="QUEUES-onfilenotfound"
+                                                                                           text="{parts: [{path:'listItems>SETTINGS/onfilenotfound/VALUE'}],formatter : '.workflowLableFormat'}"
+                                                                                           app:path="/onfilenotfound"
+                                                                                           app:tableID="QUEUES-Table"
+                                                                                           app:dt="W"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <commons:HorizontalDivider xmlns:commons="sap.ui.commons"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Label text="Workflow to check the correctness of a ticket."/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="1">
+                                                                                 <layout:content>
+                                                                                    <Image src="images/wf.gif"/>
+                                                                                    <Link text="Validate Ticket" press=".workflowSelectionDialogButtonPressed"
+                                                                                          app:workflowLableID="QUEUES-onvalidateticket"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                              <layout:MatrixLayoutCell colSpan="4">
+                                                                                 <layout:content>
+                                                                                    <Label id="QUEUES-onvalidateticket"
+                                                                                           text="{parts: [{path:'listItems>SETTINGS/onvalidateticket/VALUE'}],formatter : '.workflowLableFormat'}"
+                                                                                           app:path="/onvalidateticket"
+                                                                                           app:tableID="QUEUES-Table"
+                                                                                           app:dt="W"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <commons:HorizontalDivider xmlns:commons="sap.ui.commons"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Label text="Workflow after a file was accepted."/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="1">
+                                                                                 <layout:content>
+                                                                                    <Image src="images/wf.gif"/>
+                                                                                    <Link text="File accepted" press=".workflowSelectionDialogButtonPressed"
+                                                                                          app:workflowLableID="QUEUES-onfileaccepted"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                              <layout:MatrixLayoutCell colSpan="4">
+                                                                                 <layout:content>
+                                                                                    <Label id="QUEUES-onfileaccepted"
+                                                                                           text="{parts: [{path:'listItems>SETTINGS/onfileaccepted/VALUE'}],formatter : '.workflowLableFormat'}"
+                                                                                           app:path="/onfileaccepted"
+                                                                                           app:tableID="QUEUES-Table"
+                                                                                           app:dt="W"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                     </layout:rows>
+                                                                  </layout:MatrixLayout>
+                                                               </content>
+                                                            </Panel>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="5">
+                                                         <layout:content>
+                                                            <Label text=""/>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="5">
+                                                         <layout:content>
+                                                            <Panel headerText="Queue Status" expandable="true" expanded="true">
+                                                               <content>
+                                                                  <layout:MatrixLayout columns="5">
+                                                                     <layout:rows>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Text text="&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;The current status of the current Queue is listed below.&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="3">
+                                                                                 <layout:content>
+                                                                                    <Image id="image-qstat" src="images/active.gif"/>
+                                                                                    <Label app:id="qstat" app:type="status" app:command="QSTAT" app:text="HotFolder"
+                                                                                           app:args="refid://qname"
+                                                                                           id="qstat"
+                                                                                           text="&#xA;&#x9;&#x9;&#x9;{parts: ['listItems>NAME','listItems>VALUE'],formatter : '.statusListCheck'}&#xA;&#x9;&#x9;"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                     </layout:rows>
+                                                                  </layout:MatrixLayout>
+                                                               </content>
+                                                            </Panel>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                                <layout:MatrixLayoutRow>
+                                                   <layout:cells>
+                                                      <layout:MatrixLayoutCell colSpan="5">
+                                                         <layout:content>
+                                                            <Panel headerText="Available Queue Tasks" expandable="true" expanded="true">
+                                                               <content>
+                                                                  <layout:MatrixLayout columns="5">
+                                                                     <layout:rows>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Text text="&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Use the links below to execute one of the defined tasks.&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Image src="images/start_ch.gif"/>
+                                                                                    <Link text="Start the Queue" press=".formActionButtonPressed" app:id="QueueStart"
+                                                                                          app:refid="qstat"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Image src="images/stop_ch.gif"/>
+                                                                                    <Link text="Stop the Queue" press=".formActionButtonPressed" app:id="QueueStop"
+                                                                                          app:refid="qstat"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                        <layout:MatrixLayoutRow>
+                                                                           <layout:cells>
+                                                                              <layout:MatrixLayoutCell colSpan="5">
+                                                                                 <layout:content>
+                                                                                    <Image src="images/rstart_ch.gif"/>
+                                                                                    <Link text="Restart the Queue channel and update its configuration"
+                                                                                          press=".formActionButtonPressed"
+                                                                                          app:id="QueueRestart"
+                                                                                          app:refid="qstat"/>
+                                                                                 </layout:content>
+                                                                              </layout:MatrixLayoutCell>
+                                                                           </layout:cells>
+                                                                        </layout:MatrixLayoutRow>
+                                                                     </layout:rows>
+                                                                  </layout:MatrixLayout>
+                                                               </content>
+                                                            </Panel>
+                                                         </layout:content>
+                                                      </layout:MatrixLayoutCell>
+                                                   </layout:cells>
+                                                </layout:MatrixLayoutRow>
+                                             </layout:rows>
+                                          </layout:MatrixLayout>
+                                       </content>
+                                    </Panel>
+                                    <commons:HorizontalDivider xmlns:commons="sap.ui.commons"/>
+                                 </layout:content>
+                              </layout:MatrixLayoutCell>
+                           </layout:cells>
+                        </layout:MatrixLayoutRow>
+                     </layout:rows>
+                  </layout:MatrixLayout>
+               </l:Splitter>
+            </content>
+         </IconTabFilter>
+         <IconTabFilter text="Documentation" id="com.oce.documentation.editor" closable="false">
+            <content/>
+         </IconTabFilter>
+      </items>
+   </IconTabBar>
+</mvc:View>

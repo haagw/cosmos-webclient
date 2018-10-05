@@ -11,8 +11,9 @@ sap.ui.define([
 	"com/oce/cosmos/service/ServerService",
 	"com/oce/cosmos/util/InternalNotificationHandler",
 	"com/oce/cosmos/controller/fragment/AboutDialog",
-	"com/oce/cosmos/controller/fragment/setting/SettingDialog"
-], function(BaseController, JSONModel, i18nTranslater, OAuthService, AuthDialog, ServerService, InternalNotificationHandler, AboutDialog, SettingDialog) {
+	"com/oce/cosmos/controller/fragment/setting/SettingDialog",
+	"com/oce/cosmos/formatter/GlobalFormatter"
+], function(BaseController, JSONModel, i18nTranslater, OAuthService, AuthDialog, ServerService, InternalNotificationHandler, AboutDialog, SettingDialog, GlobalFormatter) {
 	"use strict";
 	
 	//Reference to the controller
@@ -29,6 +30,7 @@ sap.ui.define([
 		 * @memberOf com.oce.cosmos.Controller.App
 		 */
 		i18nTranslater: i18nTranslater,
+		GlobalFormatter: GlobalFormatter,
 
 		onInit: function() {
 			that = this;
@@ -52,9 +54,22 @@ sap.ui.define([
 					this.getView().setModel(oUserInformationModel, "userdata");
 					btnAuth.setIcon("sap-icon://employee");
 					btnAuth.setText(oUserInformationModel.getProperty("/user_name"));
+					
+					//Get the permissions from the user
+					var getUserPermissionsCallback = {
+					onSuccess: function (oEvenSuccess){
+						var model = oEvenSuccess.getSource();
+						that.getView().setModel(model, "userPermissions");
+						that.getView().getParent().getModel("side").refresh(true);
+					}
+			};
+			ServerService.getInstance().getUserPermissions(getUserPermissionsCallback);
+					
 				}
 				this.setUserInformation(oBearerData);
 			}
+			
+
 
 			
 		},
@@ -77,6 +92,9 @@ sap.ui.define([
 				}
 			};
 			ServerService.getInstance().getInformationList(getInformationListCallback);
+			
+
+		
 		},
 
 		/**
@@ -137,42 +155,26 @@ sap.ui.define([
 
 		handleLogout: function() {
 			
-			var sideContentModel = that.getView().getModel("side");
-			sideContentModel.setProperty("/navigation/1/visible", false);
-			sideContentModel.setProperty("/navigation/2/visible", false);
-			sideContentModel.setProperty("/navigation/3/visible", false);
-			sideContentModel.setProperty("/navigation/4/visible", false);
-			sideContentModel.setProperty("/navigation/5/visible", false);
-			sideContentModel.setProperty("/navigation/6/visible", false);
-			sideContentModel.setProperty("/navigation/7/visible", false);
-			sideContentModel.setProperty("/navigation/8/visible", false);
-			sideContentModel.setProperty("/navigation/9/visible", false);
-			sideContentModel.setProperty("/navigation/10/visible", false);
-			sideContentModel.setProperty("/navigation/11/visible", false);
-			sideContentModel.setProperty("/navigation/12/visible", false);
-			
-			sideContentModel.setProperty("/fixedNavigation/0/visible", false);
+			that.getView().setModel(null, "userPermissions");
+			that.getView().getParent().getModel("side").refresh(true);
 			
 			this.getRouter().navTo("home");
 
 		},
 		handleLogin: function() {
 
-			var sideContentModel = that.getView().getModel("side");
-			sideContentModel.setProperty("/navigation/1/visible", true);
-			sideContentModel.setProperty("/navigation/2/visible", true);
-			sideContentModel.setProperty("/navigation/3/visible", true);
-			sideContentModel.setProperty("/navigation/4/visible", true);
-			sideContentModel.setProperty("/navigation/5/visible", true);
-			sideContentModel.setProperty("/navigation/6/visible", true);
-			sideContentModel.setProperty("/navigation/7/visible", true);
-			sideContentModel.setProperty("/navigation/8/visible", true);
-			sideContentModel.setProperty("/navigation/9/visible", true);
-			sideContentModel.setProperty("/navigation/10/visible", true);
-			sideContentModel.setProperty("/navigation/11/visible", true);
-			sideContentModel.setProperty("/navigation/12/visible", true);
-			
-			sideContentModel.setProperty("/fixedNavigation/0/visible", true);
+			var getUserPermissionsCallback = {
+				onSuccess: function (oEvenSuccess){
+					var model = oEvenSuccess.getSource();
+					that.getView().setModel(model, "userPermissions");
+					that.getView().getParent().getModel("side").refresh(true);
+				},
+				onErrror: function (){
+					that.getView().getParent().getModel("side").refresh(true);
+				}
+			};
+			ServerService.getInstance().getUserPermissions(getUserPermissionsCallback);
+
 
 		},
 

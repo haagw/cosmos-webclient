@@ -121,7 +121,16 @@
 				"target": ["licenseOverview"],
 				"titleTarget": "LicenseOverview",
 				"greedy": false
-			}],
+			},{
+				"name": "inputChannelManager_Hotfolder",
+				"pattern": "inputChannelManager_Hotfolder",
+				"target": ["inputChannelManager_Hotfolder"],
+				"titleTarget": "inputChannelManager_Hotfolder",
+				"greedy": false
+			}
+			
+			
+			],
 			"targets": {
 				"home": {
 					"viewId": "home",
@@ -131,15 +140,22 @@
 					"clearAggregation": true
 				},
 				"licenseOverview": {
-					"viewName": "LicenseOverview",
 					"viewId": "licenseOverview",
+					"viewName": "LicenseOverview",
+					"viewType": "XML",
+					"transition": "slide",
+					"clearAggregation": true
+				},
+				"inputChannelManager_Hotfolder" :{
+					"viewId": "inputChannelManagerHotFolder",
+					"viewName": "inputChannelManager/HotFolder",
 					"viewType": "XML",
 					"transition": "slide",
 					"clearAggregation": true
 				},
 				"notFound": {
-					"viewName": "NotFound",
 					"viewId": "notFound",
+					"viewName": "NotFound",
 					"viewType": "XML",
 					"transition": "show",
 					"clearAggregation": true

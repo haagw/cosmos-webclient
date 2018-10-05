@@ -214,7 +214,7 @@ sap.ui.define([
 		 */
 		_getNewBearer: function(oBearerModel, getNewBearerCallback) {
 			
-			var uri = GlobalProperties.GlobalProperties.getWebAuthUri() + "token";
+			var uri = GlobalProperties.getWebAuthUri() + "token";
 			var parameters = "grant_type=" + GlobalConstants.GRANT_TYPE.REFRESH_TOKEN +
 			"&client_id=" + GlobalConstants.CLIENT_ID +
 			"&client_secret=" + GlobalConstants.CLIENT_SECRET +

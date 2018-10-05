@@ -105,7 +105,10 @@
 						}"
 						icon="{side>icon}"
 						expanded="{side>expanded}"
-						visible="{side>visible}"
+						visible="{
+							path: 'side>permission',
+							formatter: '.GlobalFormatter.hasPermission'
+						}"
 						items="{
 							path: 'side>items',
 							templateShareable: false
@@ -118,7 +121,10 @@
 							}"
 							icon="{side>icon}"
 							expanded="{side>expanded}"
-							visible="{side>visible}">
+							visible="{
+								path: 'side>permission',
+								formatter: '.GlobalFormatter.hasPermission'
+							}">
 						</tnt:NavigationListItem>
 					</tnt:NavigationListItem>
 				</tnt:NavigationList>
@@ -130,7 +136,10 @@
 						}">
 						<tnt:NavigationListItem
 							key="{side>key}"
-							visible="{side>visible}"
+							visible="{
+								path: 'side>permission',
+								formatter: '.GlobalFormatter.hasPermission'
+							}"
 							text="{
 								path: 'side>key',
 								formatter: '.i18nTranslater.doTranslate'

@@ -35,7 +35,7 @@ sap.ui.define([
 		 */
 		getInformationList: function(getInformationListCallback) {
 			
-			var uri = GlobalProperties.getWebApiUri() + "/server/list/informations";
+			var uri = GlobalProperties.getWebApiUri() + "server/list/informations";
 
 			var oInformation = new JSONModel();
 			oInformation.attachRequestCompleted(function (oEvent){
@@ -65,7 +65,7 @@ sap.ui.define([
 					    "authorization" : "Bearer " + oSubBearerModel.getProperty("/access_token") 
 					};
 					
-					var uri = GlobalProperties.getWebApiUri() + "/server/list/licenseInformations";
+					var uri = GlobalProperties.getWebApiUri() + "server/list/licenseInformations";
 					var oLicenseInformation = new JSONModel();
 					oLicenseInformation.attachRequestCompleted(function (oEvent){
 						oEvent.sender = getLicenseInformationListCallback.sender;
@@ -86,10 +86,38 @@ sap.ui.define([
 			var oBearerModel = OAuthService.getInstance().getBearerModelFromLocalStorage();
 			OAuthService.getInstance().checkBearer(oBearerModel, checkBearerCallback);
 			
+		},
+		
+		getUserPermissions: function (getUserPermissionsCallback){
+			var checkBearerCallback = {
+				sender: getUserPermissionsCallback.sender,
+				onSuccess: function(oSubBearerModel){
+					var oHeaders = {
+					    "authorization" : "Bearer " + oSubBearerModel.getProperty("/access_token") 
+					};
+					
+					var uri = GlobalProperties.getWebApiUri() + "users/currentUser/permissions";
+					var oUserPermissions = new JSONModel();
+					oUserPermissions.attachRequestCompleted(function (oEvent){
+						oEvent.sender = getUserPermissionsCallback.sender;
+						if(oEvent.getParameters().success === true){
+							getUserPermissionsCallback.onSuccess(oEvent);
+						}else{
+							InternalNotificationHandler.notifyAPIException(oEvent);
+						}
+					});
+					//oUserPermissions.loadData("test/model/userPrivileges.json");
+					oUserPermissions.loadData(uri, "", true, "GET", false, "", oHeaders); 
+					
+				},
+				onError: function(oError){
+					InternalNotificationHandler.notifyAPIException(oError);
+				}
+			};
+			var oBearerModel = OAuthService.getInstance().getBearerModelFromLocalStorage();
+			OAuthService.getInstance().checkBearer(oBearerModel, checkBearerCallback);
 		}
 
-	
-		
 	});
 
 	return {
