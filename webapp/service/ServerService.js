@@ -101,6 +101,7 @@ sap.ui.define([
 					oUserPermissions.attachRequestCompleted(function (oEvent){
 						oEvent.sender = getUserPermissionsCallback.sender;
 						if(oEvent.getParameters().success === true){
+							$.sap.log.debug("*** UserPermissions: " + JSON.stringify(oEvent.getSource().getData()));
 							getUserPermissionsCallback.onSuccess(oEvent);
 						}else{
 							InternalNotificationHandler.notifyAPIException(oEvent);

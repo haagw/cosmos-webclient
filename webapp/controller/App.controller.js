@@ -45,11 +45,14 @@ sap.ui.define([
 			var btnAuth = that.byId("btnAuth");
 			//btnAuth.setText(i18nTranslater.doTranslate("login"));
 			
+			
 			//Handle the srorage values
 			var oBearerData = OAuthService.getInstance().getBearerFromLocalStorage();
 			if(oBearerData !== null){
+				$.sap.log.debug("*** BearerData found in local storage ***");
 				var oUserInformation = OAuthService.getInstance().getUserInformationFromLocalStorage();
 				if(oUserInformation !== null){
+					$.sap.log.debug("*** UserInfo found in local storage ***");
 					var oUserInformationModel = new JSONModel(oUserInformation);
 					this.getView().setModel(oUserInformationModel, "userdata");
 					btnAuth.setIcon("sap-icon://employee");
@@ -57,14 +60,14 @@ sap.ui.define([
 					
 					//Get the permissions from the user
 					var getUserPermissionsCallback = {
-					onSuccess: function (oEvenSuccess){
-						var model = oEvenSuccess.getSource();
-						that.getView().setModel(model, "userPermissions");
-						that.getView().getParent().getModel("side").refresh(true);
-					}
-			};
-			ServerService.getInstance().getUserPermissions(getUserPermissionsCallback);
-					
+						onSuccess: function (oEvenSuccess){
+							$.sap.log.debug("*** UserPermissions loaded ***");
+							var model = oEvenSuccess.getSource();
+							that.getView().setModel(model, "userPermissions");
+							that.getView().getParent().getModel("side").refresh(true);
+						}
+					};
+					ServerService.getInstance().getUserPermissions(getUserPermissionsCallback);
 				}
 				this.setUserInformation(oBearerData);
 			}

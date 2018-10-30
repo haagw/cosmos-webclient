@@ -123,9 +123,10 @@ sap.ui.define([
 		checkBearer: function(oBearerModel, checkBearerCallback){
 
 			if(oBearerModel.getProperty("/accessTokenValid") === false){
+				$.sap.log.debug("*** AccessToken is invalid ***");
 				var getNewBearerCallback = {
 					onSuccess: function(newBearerModel){
-						
+						$.sap.log.debug("*** The refresh token was valid ***");
 						instance.setBearerToLocalStorage(newBearerModel.getData());
 						checkBearerCallback.onSuccess(newBearerModel);
 						
@@ -200,6 +201,7 @@ sap.ui.define([
 				};
 				instance._getNewBearer(oBearerModel, getNewBearerCallback);
 			}else{
+				$.sap.log.debug("*** AccessToken is valid ***");
 				checkBearerCallback.onSuccess(oBearerModel);
 			}
 			
@@ -219,6 +221,8 @@ sap.ui.define([
 			"&client_id=" + GlobalConstants.CLIENT_ID +
 			"&client_secret=" + GlobalConstants.CLIENT_SECRET +
 			"&refresh_token=" + oBearerModel.getProperty("/refresh_token");
+
+			$.sap.log.debug("*** Get new Bearer with refresh token:" + oBearerModel.getProperty("/refresh_token"));
 
 			var oBearer = new JSONModel();
 			oBearer.attachRequestCompleted(function (oEvent){
@@ -255,7 +259,7 @@ sap.ui.define([
 				} else {
 					oBearerData.accessTokenValid = true;
 				}
-				$.sap.log.debug("*** LOAD BEARER: " + JSON.stringify(oBearerData));
+				$.sap.log.debug("*** LS BEARER: " + JSON.stringify(oBearerData));
 				return oBearerData;
 
 			}
@@ -278,7 +282,9 @@ sap.ui.define([
 		 * @returns {object} The user information
 		 */
 		getUserInformationFromLocalStorage : function(){
-			return storage.get(GlobalConstants.STORAGE_USERINFO);
+			var oUserInformation = storage.get(GlobalConstants.STORAGE_USERINFO);
+			$.sap.log.debug("*** LS UserInfo: " + JSON.stringify(oUserInformation));
+			return oUserInformation;
 		},
 		
 		/** 
